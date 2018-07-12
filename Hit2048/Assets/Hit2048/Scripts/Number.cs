@@ -30,7 +30,7 @@ public class Number : MonoBehaviour {
     {
         if (isFire)
         {
-            transform.Translate(Vector3.up * 0.3f);
+            transform.Translate(Vector3.up * 0.1f);
         }
     }
 
