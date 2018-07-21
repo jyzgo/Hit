@@ -10,7 +10,25 @@ public class ResMgr : MonoBehaviour {
         Current = this;
     }
     public GameObject SmallSquare;
-  
-   
+
+    public Color[] cbg;
+    public Color[] Colors;
+
+    public GameObject Cell;
+
+    private void Start()
+    {
+        
+    }
+
+    
+
+    void Test()
+    {
+
+    }
+
+
+
 
 }
