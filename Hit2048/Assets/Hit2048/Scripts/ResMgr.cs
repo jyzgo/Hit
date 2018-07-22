@@ -42,8 +42,11 @@ public class ResMgr : MonoBehaviour {
             var cell = cells[i];
             cell.SetBgColor(cbg[i]);
             cell.SetCenterColor(Colors[i]);
+            cell.SetNum(test[i % test.Length]);
         }
     }
+
+    int[] test = new int[4] { 5, 55, 555, 2048 };
 
     private void Update()
     {
