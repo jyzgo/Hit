@@ -11,6 +11,7 @@ enum PlayState
 {
     Ready,
     Playing,
+    Rotating,
     Lose
 };
 public class LevelMgr :MonoBehaviour
@@ -129,7 +130,6 @@ public class LevelMgr :MonoBehaviour
            
         }
 
-        _rotateCircle.Playing_Update();
     }
 
     #endregion
