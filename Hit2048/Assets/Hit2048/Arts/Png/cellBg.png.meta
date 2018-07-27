@@ -128,12 +128,12 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 404673d7f1ab8f54880b013d4700407c
     vertices: []
     indices: 
     edges: []
     weights: []
-  spritePackingTag: cell
+  spritePackingTag: hit
   userData: 
   assetBundleName: 
   assetBundleVariant: 

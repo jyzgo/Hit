@@ -11,6 +11,7 @@ enum PlayState
 {
     Ready,
     Playing,
+    Shooting,
     Rotating,
     Lose
 };
@@ -23,21 +24,19 @@ public class LevelMgr :MonoBehaviour
 
     StateMachine<PlayState> _fsm;
     UIMgr uiMgr;
+    RotateCenter _rotateCircle;
     Camera mainCam;
     public void Init()
     {
         Physics.gravity = new Vector3(0, -30.0F, 0);
         uiMgr = FindObjectOfType<UIMgr>();
-
+        _rotateCircle = GameObject.FindObjectOfType<RotateCenter>();
         _fsm = StateMachine<PlayState>.Initialize(this, PlayState.Ready);
         mainCam = Camera.main;
 
-        _rotateCircle = GameObject.FindObjectOfType<RotateCircle>();
-
-
     }
 
-    RotateCircle _rotateCircle;
+
 
     void Awake()
     {
@@ -61,13 +60,12 @@ public class LevelMgr :MonoBehaviour
         Debug.Log("Ready");
         uiMgr.SetStateText("Get Ready!");
         Reset();
-        //_fsm.ChangeState(PlayState.Playing);
+       // _fsm.ChangeState(PlayState.Playing);
     }
 
     bool _isNumberOk = false;
     internal void Hitted(int num)
     {
-        GenerateNumber();
     }
 
     void Ready_Update()
@@ -79,6 +77,8 @@ public class LevelMgr :MonoBehaviour
     }
     private void Reset()
     {
+        _currentAngle = 0f;
+        _rotateCircle.transform.rotation = Quaternion.identity;
 
         //_player.transform.position = new Vector3(0, 1, 0);
     }
@@ -113,22 +113,12 @@ public class LevelMgr :MonoBehaviour
     {
         Debug.Log("Playing");
         uiMgr.SetStateText("Playing");
-        GenerateNumber();
     }
 
     void Playing_Update()
     {
-
-        // Required key is down?
-        if (Input.GetKeyDown(KeyCode.Mouse0) == true)
-        {
-            if (_isNumberOk)
-            {
-                _isNumberOk = false;
-                _number.Fire();
-            }
-           
-        }
+        
+ 
 
     }
 
@@ -136,14 +126,7 @@ public class LevelMgr :MonoBehaviour
 
 
     Number _number = null;
-    void GenerateNumber()
-    {
-        var gb = Instantiate<GameObject>(NumberPrefab);
-        _number = gb.GetComponent<Number>();
-        _number.Init(2);
-        _isNumberOk = true;
-
-    }
+ 
     public void Touch()
     {
         Debug.Log("Touch");
@@ -158,10 +141,34 @@ public class LevelMgr :MonoBehaviour
         }
         else if (_fsm.State == PlayState.Playing)
         {
-
+            _fsm.ChangeState(PlayState.Shooting);
 
         }
     }
+
+    #region Rotating
+    const float ROTATE_INTERVAL = 0.4f;
+    float _currentAngle = 0f;
+    IEnumerator Rotating_Enter()
+    {
+        Debug.Log("Rotating enter");
+        yield return new WaitForSeconds(ROTATE_INTERVAL);
+        _currentAngle -= 90f;
+        _rotateCircle.RunActions(new MTRotateTo(ROTATE_INTERVAL, new Vector3(0,0,_currentAngle)));
+        _fsm.ChangeState(PlayState.Playing);
+
+    }
+    #endregion
+
+    #region Shooting
+    IEnumerator Shooting_Enter()
+    {
+        Debug.Log("shooting");
+        yield return new WaitForSeconds(0f);
+        _fsm.ChangeState(PlayState.Rotating);
+
+    }
+    #endregion
 
 }
 

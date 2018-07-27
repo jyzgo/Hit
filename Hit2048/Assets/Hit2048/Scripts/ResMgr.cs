@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿//#define TEST_RES
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class ResMgr : MonoBehaviour {
+
 
     public static ResMgr Current;
     private void Awake()
@@ -19,7 +22,9 @@ public class ResMgr : MonoBehaviour {
     Cell[] cells = new Cell[10];
     private void Start()
     {
+#if (TEST_RES)
         Test();
+#endif
     }
 
     
@@ -50,7 +55,7 @@ public class ResMgr : MonoBehaviour {
 
     private void Update()
     {
-        TestUpdate();
+        //TestUpdate();
     }
 
 

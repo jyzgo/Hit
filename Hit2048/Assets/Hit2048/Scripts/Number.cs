@@ -43,7 +43,7 @@ public class Number : MonoBehaviour {
             return;
         }
         
-        RotateCircle circle = collision.GetComponent<RotateCircle>();
+        RotateCenter circle = collision.GetComponent<RotateCenter>();
         if(circle != null)
         {
             isFire = false;
