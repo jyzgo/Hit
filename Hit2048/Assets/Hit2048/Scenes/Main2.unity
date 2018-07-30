@@ -844,8 +844,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1650812518}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.89166, y: 0.8829937, z: -0.5370888}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 1.48, z: 0}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
@@ -890,8 +890,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3a05a078e432674988e306a6c8725ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NumberPrefab: {fileID: 1393337856756328, guid: 6f0c2ecdab85c6842bc1cc64500923dd,
-    type: 2}
+  CellPrefab: {fileID: 1206959486682670, guid: 13610753da5850346a0378d39f2b3e4b, type: 2}
 --- !u!1 &2012926050
 GameObject:
   m_ObjectHideFlags: 0

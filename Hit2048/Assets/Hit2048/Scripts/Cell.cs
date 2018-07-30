@@ -22,7 +22,13 @@ public class Cell : MonoBehaviour {
     int number = 2;
     public void SetNum(int n)
     {
-        number = n;
+        Debug.Assert(n > 0);
+        var bgColor = ResMgr.Current.cbg[n - 1];
+        var cellColor = ResMgr.Current.Colors[n - 1];
+        SetBgColor(bgColor);
+        SetCenterColor(cellColor);
+
+        number = 2 ^ n;
         if (n < 10)
         {
             text.fontSize = 80;
@@ -38,7 +44,7 @@ public class Cell : MonoBehaviour {
         {
             text.fontSize = 40;
         }
-        text.text = n.ToString();
+        text.text = number.ToString();
     }
 
 }

@@ -55,6 +55,7 @@ public class LevelMgr :MonoBehaviour
 		
 	}
 
+    #region Ready
     void Ready_Enter()
     {
         Debug.Log("Ready");
@@ -68,6 +69,15 @@ public class LevelMgr :MonoBehaviour
     {
     }
 
+    void GenerateCell()
+    {
+        var cellGb = Instantiate<GameObject>(CellPrefab);
+        var cell = cellGb.GetComponent<Cell>();
+        int ran = MTRandom.GetRandomInt(1, 9);
+        cell.SetNum(ran);
+        cell.transform.position = new Vector3(0.3f * ran, -1, 0);
+    }
+
     void Ready_Update()
     {
         if(Input.GetMouseButtonDown(0))
@@ -75,6 +85,8 @@ public class LevelMgr :MonoBehaviour
             OnClick(Vector3.zero);
         }
     }
+
+    #endregion Ready
     private void Reset()
     {
         _currentAngle = 0f;
@@ -101,8 +113,7 @@ public class LevelMgr :MonoBehaviour
 
     #region Prefabs
 
-    public GameObject NumberPrefab;
-
+    public GameObject CellPrefab;
 
     #endregion
 
@@ -113,7 +124,11 @@ public class LevelMgr :MonoBehaviour
     {
         Debug.Log("Playing");
         uiMgr.SetStateText("Playing");
+        GenerateCell();
+
     }
+
+    
 
     void Playing_Update()
     {
