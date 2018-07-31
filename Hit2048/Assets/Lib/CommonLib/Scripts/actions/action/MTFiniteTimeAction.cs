@@ -99,5 +99,10 @@ namespace MTUnity.Actions
             );
         }
 
+        protected internal override void Stop()
+        {
+            base.Stop();
+        }
+
     }
 }

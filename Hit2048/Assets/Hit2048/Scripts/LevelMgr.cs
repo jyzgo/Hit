@@ -132,7 +132,8 @@ public class LevelMgr :MonoBehaviour
         Debug.Log("Playing");
         uiMgr.SetStateText("Playing");
         _currentCell =  GenerateCell();
- _indicator.gameObject.SetActive(true);
+       
+        _indicator.gameObject.SetActive(true);
     }
 
 
