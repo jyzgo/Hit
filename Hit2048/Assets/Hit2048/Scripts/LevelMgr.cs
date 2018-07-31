@@ -69,13 +69,18 @@ public class LevelMgr :MonoBehaviour
     {
     }
 
-    void GenerateCell()
+    float cell_y_pos = 0f;
+    Cell GenerateCell()
     {
         var cellGb = Instantiate<GameObject>(CellPrefab);
         var cell = cellGb.GetComponent<Cell>();
         int ran = MTRandom.GetRandomInt(1, 9);
         cell.SetNum(ran);
-        cell.transform.position = new Vector3(0.3f * ran, -1, 0);
+        //cell.transform.position = new Vector3(0.3f * ran, -1, 0);
+        Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 0));
+        cell.transform.position = worldPoint + Vector3.up*0.5f;
+        cell_y_pos = cell.transform.position.y;
+        return cell;
     }
 
     void Ready_Update()
@@ -119,20 +124,34 @@ public class LevelMgr :MonoBehaviour
 
 
     #region Playing
-
+    Cell _currentCell = null;
     void Playing_Enter()
     {
         Debug.Log("Playing");
         uiMgr.SetStateText("Playing");
-        GenerateCell();
+        _currentCell =  GenerateCell();
 
     }
 
-    
 
+    const float CELL_WIDTH= 0.5f;
     void Playing_Update()
     {
-        
+        var touchPos = Input.mousePosition;
+        if(_currentCell != null)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                var viewPos = new Vector3(touchPos.x / Screen.width, touchPos.y / Screen.height, 0f);
+                var pos = Camera.main.ScreenToWorldPoint(touchPos);
+                float x = (int)(pos.x /CELL_WIDTH) * CELL_WIDTH;
+
+
+                _currentCell.transform.position = new Vector3(x, cell_y_pos, 0);
+            }
+                 
+        }
+
  
 
     }
@@ -156,7 +175,7 @@ public class LevelMgr :MonoBehaviour
         }
         else if (_fsm.State == PlayState.Playing)
         {
-            _fsm.ChangeState(PlayState.Shooting);
+            //_fsm.ChangeState(PlayState.Shooting);
 
         }
     }
