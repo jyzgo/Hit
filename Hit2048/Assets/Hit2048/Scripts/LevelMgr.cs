@@ -33,10 +33,12 @@ public class LevelMgr :MonoBehaviour
         _rotateCircle = GameObject.FindObjectOfType<RotateCenter>();
         _fsm = StateMachine<PlayState>.Initialize(this, PlayState.Ready);
         mainCam = Camera.main;
+        _indicator = GetComponentInChildren<Indicator>();
+        _indicator.gameObject.SetActive(false);
 
     }
 
-
+    public Indicator _indicator;
 
     void Awake()
     {
@@ -130,7 +132,7 @@ public class LevelMgr :MonoBehaviour
         Debug.Log("Playing");
         uiMgr.SetStateText("Playing");
         _currentCell =  GenerateCell();
-
+ _indicator.gameObject.SetActive(true);
     }
 
 
@@ -146,14 +148,25 @@ public class LevelMgr :MonoBehaviour
                 var pos = Camera.main.ScreenToWorldPoint(touchPos);
                 float x = (int)(pos.x /CELL_WIDTH) * CELL_WIDTH;
 
+                var tarPos = new Vector3(x, cell_y_pos, 0);
+                _currentCell.transform.position =tarPos;
+                _indicator.transform.position = tarPos;
 
-                _currentCell.transform.position = new Vector3(x, cell_y_pos, 0);
+               
+            }else
+            {
+               
             }
                  
         }
 
  
 
+    }
+
+    void Playing_OnExit()
+    {
+        _indicator.gameObject.SetActive(false);
     }
 
     #endregion

@@ -28,7 +28,8 @@ public class Cell : MonoBehaviour {
         SetBgColor(bgColor);
         SetCenterColor(cellColor);
 
-        number = 2 ^ n;
+
+        number = (int)System.Math.Pow(2,n);
         if (n < 10)
         {
             text.fontSize = 80;
