@@ -946,7 +946,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -960,7 +960,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.42666668, y: 0.42666668}
+  m_Size: {x: 0.4, y: 0.4}
   m_EdgeRadius: 0
 --- !u!1 &1818639337
 GameObject:
@@ -1005,6 +1005,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _indicator: {fileID: 0}
   CellPrefab: {fileID: 1206959486682670, guid: 13610753da5850346a0378d39f2b3e4b, type: 2}
+--- !u!1001 &1974917853
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4453433592491766, guid: 13610753da5850346a0378d39f2b3e4b, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4453433592491766, guid: 13610753da5850346a0378d39f2b3e4b, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 3.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 4453433592491766, guid: 13610753da5850346a0378d39f2b3e4b, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4453433592491766, guid: 13610753da5850346a0378d39f2b3e4b, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4453433592491766, guid: 13610753da5850346a0378d39f2b3e4b, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4453433592491766, guid: 13610753da5850346a0378d39f2b3e4b, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4453433592491766, guid: 13610753da5850346a0378d39f2b3e4b, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4453433592491766, guid: 13610753da5850346a0378d39f2b3e4b, type: 2}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 13610753da5850346a0378d39f2b3e4b, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &2012926050
 GameObject:
   m_ObjectHideFlags: 0

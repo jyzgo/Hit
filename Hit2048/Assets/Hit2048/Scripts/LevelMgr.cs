@@ -24,13 +24,13 @@ public class LevelMgr :MonoBehaviour
 
     StateMachine<PlayState> _fsm;
     UIMgr uiMgr;
-    RotateCenter _rotateCircle;
+    public RotateCenter RotateCircle { get; private set; }
     Camera mainCam;
     public void Init()
     {
         Physics.gravity = new Vector3(0, -30.0F, 0);
         uiMgr = FindObjectOfType<UIMgr>();
-        _rotateCircle = GameObject.FindObjectOfType<RotateCenter>();
+        RotateCircle = GameObject.FindObjectOfType<RotateCenter>();
         _fsm = StateMachine<PlayState>.Initialize(this, PlayState.Ready);
         mainCam = Camera.main;
         _indicator = GetComponentInChildren<Indicator>();
@@ -80,7 +80,7 @@ public class LevelMgr :MonoBehaviour
         cell.SetNum(ran);
         //cell.transform.position = new Vector3(0.3f * ran, -1, 0);
         Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 0));
-        cell.transform.position = worldPoint + Vector3.up*0.5f;
+        cell.transform.position = worldPoint + Vector3.up*0.5f +Vector3.forward * 10f;
         cell_y_pos = cell.transform.position.y;
         cell.transform.localScale = Vector3.one * 0.01f;
         
@@ -88,7 +88,7 @@ public class LevelMgr :MonoBehaviour
         return cell;
     }
 
-    MTFiniteTimeAction GetScale()
+    public MTFiniteTimeAction GetScale()
     {
         return new MTSequence(new MTScaleTo(0.15f,1.2f),new MTScaleTo(0.15f,0.8f),new MTScaleTo(0.1f,1f));
     }
@@ -105,7 +105,7 @@ public class LevelMgr :MonoBehaviour
     private void Reset()
     {
         _currentAngle = 0f;
-        _rotateCircle.transform.rotation = Quaternion.identity;
+        RotateCircle.transform.rotation = Quaternion.identity;
 
         //_player.transform.position = new Vector3(0, 1, 0);
     }
@@ -136,11 +136,12 @@ public class LevelMgr :MonoBehaviour
     #region Playing
     Cell _currentCell = null;
     bool _isIndicatorActive = false;
-    void Playing_Enter()
+    IEnumerator Playing_Enter()
     {
         Debug.Log("Playing");
         uiMgr.SetStateText("Playing");
         _currentCell =  GenerateCell();
+        yield return new WaitForSeconds(0.3f);
         _isIndicatorActive = false;
         _indicator.gameObject.SetActive(false);
     }
@@ -148,7 +149,7 @@ public class LevelMgr :MonoBehaviour
 
 
 
-    const float CELL_WIDTH= 0.5f;
+    const float CELL_WIDTH= 0.426f;
     void Playing_Update()
     {
         var touchPos = Input.mousePosition;
@@ -206,11 +207,7 @@ public class LevelMgr :MonoBehaviour
         {
             _fsm.ChangeState(PlayState.Playing);
         }
-        else if (_fsm.State == PlayState.Playing)
-        {
-            //_fsm.ChangeState(PlayState.Shooting);
 
-        }
     }
 
     #region Rotating
@@ -221,7 +218,7 @@ public class LevelMgr :MonoBehaviour
         Debug.Log("Rotating enter");
         yield return new WaitForSeconds(ROTATE_INTERVAL);
         _currentAngle -= 90f;
-        _rotateCircle.RunActions(new MTRotateTo(ROTATE_INTERVAL, new Vector3(0,0,_currentAngle)));
+        RotateCircle.RunActions(new MTRotateTo(ROTATE_INTERVAL, new Vector3(0,0,_currentAngle)));
         _fsm.ChangeState(PlayState.Playing);
 
     }
