@@ -90,7 +90,7 @@ public class LevelMgr :MonoBehaviour
 
     MTFiniteTimeAction GetScale()
     {
-        return new MTSequence(new MTScaleTo(0.15f,0.35f),new MTScaleTo(0.15f,0.25f),new MTScaleTo(0.1f,0.3f));
+        return new MTSequence(new MTScaleTo(0.15f,1.2f),new MTScaleTo(0.15f,0.8f),new MTScaleTo(0.1f,1f));
     }
 
     void Ready_Update()
@@ -135,14 +135,17 @@ public class LevelMgr :MonoBehaviour
 
     #region Playing
     Cell _currentCell = null;
+    bool _isIndicatorActive = false;
     void Playing_Enter()
     {
         Debug.Log("Playing");
         uiMgr.SetStateText("Playing");
         _currentCell =  GenerateCell();
-       
-        _indicator.gameObject.SetActive(true);
+        _isIndicatorActive = false;
+        _indicator.gameObject.SetActive(false);
     }
+
+
 
 
     const float CELL_WIDTH= 0.5f;
@@ -160,11 +163,19 @@ public class LevelMgr :MonoBehaviour
                 var tarPos = new Vector3(x, cell_y_pos, 0);
                 _currentCell.transform.position =tarPos;
                 _indicator.transform.position = tarPos;
-
+                _isIndicatorActive = true;
+                _indicator.gameObject.SetActive(true);
                
             }else
             {
-               
+                if (_isIndicatorActive)
+                {
+                    _currentCell.SetActive();
+                    _currentCell = null;
+                    _fsm.ChangeState(PlayState.Shooting);
+                    _isIndicatorActive = false;
+                    _indicator.gameObject.SetActive(false);
+                }
             }
                  
         }
@@ -175,7 +186,7 @@ public class LevelMgr :MonoBehaviour
 
     void Playing_OnExit()
     {
-        _indicator.gameObject.SetActive(false);
+       
     }
 
     #endregion
@@ -220,7 +231,7 @@ public class LevelMgr :MonoBehaviour
     IEnumerator Shooting_Enter()
     {
         Debug.Log("shooting");
-        yield return new WaitForSeconds(0f);
+        yield return new WaitForSeconds(0.5f);
         _fsm.ChangeState(PlayState.Rotating);
 
     }

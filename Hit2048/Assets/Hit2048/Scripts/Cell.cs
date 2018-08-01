@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,15 +31,15 @@ public class Cell : MonoBehaviour {
 
 
         number = (int)System.Math.Pow(2,n);
-        if (n < 10)
+        if (number< 10)
         {
             text.fontSize = 80;
         }
-        else if (n >= 10 && n < 100)
+        else if (number >= 10 && n < 100)
         {
-            text.fontSize = 70;
+            text.fontSize = 60;
         }
-        else if (n >= 100 && n < 1000)
+        else if (number >= 100 && n < 1000)
         {
             text.fontSize = 55;
         } else
@@ -48,4 +49,34 @@ public class Cell : MonoBehaviour {
         text.text = number.ToString();
     }
 
+    bool isCellActive = false;
+    internal void SetActive()
+    {
+        isCellActive = true;
+    }
+    private void Update()
+    {
+        if(isCellActive)
+        {
+            transform.Translate(Vector3.up * 0.1f);
+        }
+    }
+    bool isAttached = false;
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (isAttached)
+        {
+            return;
+        }
+
+        RotateCenter center = collision.GetComponent<RotateCenter>();
+        if(center != null)
+        {
+            isAttached = true;
+            isCellActive = false;
+            transform.position = center.transform.position + Vector3.down * 1.29f;
+            transform.SetParent(center.transform);
+        }
+    }
 }
