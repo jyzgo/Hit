@@ -82,7 +82,15 @@ public class LevelMgr :MonoBehaviour
         Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 0));
         cell.transform.position = worldPoint + Vector3.up*0.5f;
         cell_y_pos = cell.transform.position.y;
+        cell.transform.localScale = Vector3.one * 0.01f;
+        
+        cell.RunAction(GetScale());
         return cell;
+    }
+
+    MTFiniteTimeAction GetScale()
+    {
+        return new MTSequence(new MTScaleTo(0.15f,0.35f),new MTScaleTo(0.15f,0.25f),new MTScaleTo(0.1f,0.3f));
     }
 
     void Ready_Update()
