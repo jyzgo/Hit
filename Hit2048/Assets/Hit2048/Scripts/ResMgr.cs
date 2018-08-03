@@ -58,6 +58,7 @@ public class ResMgr : MonoBehaviour {
         //TestUpdate();
     }
 
+    public Sprite[] Numbers;
 
 
 

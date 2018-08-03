@@ -10,7 +10,7 @@ public class Cell : MonoBehaviour {
     public SpriteRenderer CellBg;
     public SpriteRenderer CellCenter;
     public Transform CellCenterTrans;
-    public Text text;
+    public SpriteRenderer Number;
 
     RotateCenter _center;
     private void Start()
@@ -41,22 +41,8 @@ public class Cell : MonoBehaviour {
 
 
         number = (int)System.Math.Pow(2,n);
-        if (number< 10)
-        {
-            text.fontSize = 80;
-        }
-        else if (number >= 10 && n < 100)
-        {
-            text.fontSize = 60;
-        }
-        else if (number >= 100 && n < 1000)
-        {
-            text.fontSize = 55;
-        } else
-        {
-            text.fontSize = 45;
-        }
-        text.text = number.ToString();
+        Number.sprite = ResMgr.Current.Numbers[n - 1];
+   
     }
 
     bool isCellActive = false;
