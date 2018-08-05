@@ -49,9 +49,9 @@ public class LevelMgr :MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
-		
+
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		
@@ -60,7 +60,7 @@ public class LevelMgr :MonoBehaviour
     #region Ready
     void Ready_Enter()
     {
-        Debug.Log("Ready");
+
         uiMgr.SetStateText("Get Ready!");
         Reset();
        // _fsm.ChangeState(PlayState.Playing);
@@ -138,7 +138,7 @@ public class LevelMgr :MonoBehaviour
     bool _isIndicatorActive = false;
     IEnumerator Playing_Enter()
     {
-        Debug.Log("Playing");
+
         uiMgr.SetStateText("Playing");
         _currentCell =  GenerateCell();
         yield return new WaitForSeconds(0.3f);
@@ -215,7 +215,7 @@ public class LevelMgr :MonoBehaviour
     float _currentAngle = 0f;
     IEnumerator Rotating_Enter()
     {
-        Debug.Log("Rotating enter");
+
         yield return new WaitForSeconds(ROTATE_INTERVAL);
         _currentAngle -= 90f;
         RotateCircle.RunActions(new MTRotateTo(ROTATE_INTERVAL, new Vector3(0,0,_currentAngle)));
@@ -227,7 +227,7 @@ public class LevelMgr :MonoBehaviour
     #region Shooting
     IEnumerator Shooting_Enter()
     {
-        Debug.Log("shooting");
+
         yield return new WaitForSeconds(0.5f);
         _fsm.ChangeState(PlayState.Rotating);
 

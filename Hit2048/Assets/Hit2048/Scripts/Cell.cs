@@ -11,6 +11,7 @@ public class Cell : MonoBehaviour {
     public SpriteRenderer CellCenter;
     public Transform CellCenterTrans;
     public SpriteRenderer Number;
+    public Text TestText;
 
     RotateCenter _center;
     private void Start()
@@ -60,6 +61,7 @@ public class Cell : MonoBehaviour {
     }
     bool isAttached = false;
 
+    const float CELL_SIZE = 0.426f;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (isAttached)
@@ -72,10 +74,10 @@ public class Cell : MonoBehaviour {
         {
             isAttached = true;
             isCellActive = false;
-            transform.position = center.transform.position + Vector3.down * 0.426f;
-            transform.SetParent(center.transform);
+            transform.position = center.transform.position + Vector3.down * CELL_SIZE;
             transform.SetParent(_center.transform);
             this.RunAction(GetScale());
+            SetLocalCoord();
         }
 
         Cell anotherCell = collision.GetComponent<Cell>();
@@ -94,7 +96,20 @@ public class Cell : MonoBehaviour {
                     anotherCell.IncreaseNum();
                 }),new MTDestroy());
             }
+            SetLocalCoord();
+
         }
+
+    }
+
+    int corX = 0;
+    int corY = 0;
+    void SetLocalCoord()
+    {
+        corX = (int)(Math.Round(transform.localPosition.x / CELL_SIZE));
+        corY =(int)(Math.Round(transform.localPosition.y / CELL_SIZE));
+            Debug.Log("cell local pos x" + corX + " y " + corY);
+        TestText.text = corX.ToString() +" "+  corY.ToString();
     }
 
     private void IncreaseNum()
