@@ -29,7 +29,7 @@ public class Cell : MonoBehaviour {
         CellCenter.color = c;
     }
 
-    int number = 2;
+    public int number = 2;
     int pow = 0;
     public void SetNum(int n)
     {
@@ -92,9 +92,7 @@ public class Cell : MonoBehaviour {
                 this.RunAction(GetScale());
             }else
             {
-                this.RunActions(new MTMoveTo(0.1f, anotherCell.transform.position + Vector3.back),new MTCallFunc(()=> {
-                    anotherCell.IncreaseNum();
-                }),new MTDestroy());
+                MergeTo(anotherCell); 
             }
             SetLocalCoord();
 
@@ -102,14 +100,23 @@ public class Cell : MonoBehaviour {
 
     }
 
-    int corX = 0;
-    int corY = 0;
+    public void MergeTo(Cell anotherCell)
+    {
+        this.RunActions(new MTMoveTo(0.1f, anotherCell.transform.position + Vector3.back), new MTCallFunc(() =>
+        {
+            anotherCell.IncreaseNum();
+                }),new MTDestroy());
+    }
+
+    public int corX = 0;
+    public int corY = 0;
     void SetLocalCoord()
     {
-        corX = (int)(Math.Round(transform.localPosition.x / CELL_SIZE));
-        corY =(int)(Math.Round(transform.localPosition.y / CELL_SIZE));
-            Debug.Log("cell local pos x" + corX + " y " + corY);
+        corX = (int)(Math.Round(transform.localPosition.x / CELL_SIZE)) + 10;
+        corY =(int)(Math.Round(transform.localPosition.y / CELL_SIZE)) + 10;
+
         TestText.text = corX.ToString() +" "+  corY.ToString();
+        LevelMgr.Current.SetCells(corX, corY, this);
     }
 
     private void IncreaseNum()

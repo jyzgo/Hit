@@ -6,6 +6,7 @@ using System;
 using MonsterLove.StateMachine;
 using MTUnity.Actions;
 using Destructible2D;
+using MTUnity.Utils;
 
 enum PlayState
 {
@@ -15,6 +16,8 @@ enum PlayState
     Rotating,
     Lose
 };
+
+
 public class LevelMgr :MonoBehaviour
 {
     
@@ -69,6 +72,176 @@ public class LevelMgr :MonoBehaviour
     bool _isNumberOk = false;
     internal void Hitted(int num)
     {
+    }
+
+
+    const int CELL_MAX_INDEX = 10;
+    const int MAX_SIZE = CELL_MAX_INDEX * 2 + 1;
+    Cell[,] cells = new Cell[MAX_SIZE,MAX_SIZE];
+
+    public void SetCells(int x,int y,Cell cell)
+    {
+        Debug.Log("set cells x" + x + "y" + y);
+        Debug.Assert(cells[x, y] == null);
+        cells[x, y] = cell;
+
+    }
+
+    public void GenerateCellsAtEnter(int n = 2)
+    {
+        List<int> xlist = new List<int>();
+        List<int> ylist = new List<int>();
+        for (int x = 1; x < MAX_SIZE -1; x++)
+        {
+            for(int y = 1; y < MAX_SIZE -1; y++)
+            {
+                if (x == y && x == 10)
+                {
+                    continue;
+                }
+                var curCell = cells[x, y];
+                if (curCell == null)
+                {
+                    continue;
+                }
+
+                Debug.Log("x " + x + " y " + y);
+                if (cells[x + 1, y] == null)
+                {
+                    xlist.Add(x + 1);
+                    ylist.Add(y);
+                }
+                if (cells[x, y + 1]== null)
+                {
+                    xlist.Add(x);
+                    ylist.Add(y + 1);
+                }
+                if (cells[x - 1, y] == null)
+                {
+                    xlist.Add(x - 1);
+                    ylist.Add(y);
+                }
+                if (cells[x, y - 1] == null)
+                {
+                    xlist.Add(x);
+                    ylist.Add(y - 1);
+                }
+            }
+        }
+
+        List<int> indexList = new List<int>();
+        for (int i = 0; i < xlist.Count; i++)
+        {
+            indexList.Add(i);
+        }
+
+        Debug.Log("LIST " + xlist.Count);
+
+        DataUtil.ShuffleList<int>(indexList);
+
+        for (int i = 0; i < indexList.Count && i < n; i++)
+        {
+            int x = xlist[i];
+            int y = ylist[i];
+            var curCell = GenerateCell();
+            SetCells(x, y,curCell);
+
+            curCell.transform.parent = RotateCircle.transform;
+            curCell.transform.localPosition = new Vector3((x - 10) * CELL_WIDTH, (y - 10) * CELL_WIDTH, 0);
+
+            
+
+        }
+
+
+        //MTUnity.Actions
+        MTRandom.GetRandomInt(0,1);
+    }
+
+    public void CheckCellsMerge()
+    {
+        Debug.Log("check");
+        bool isChecked = false;
+        for (int x = 0; x < CELL_MAX_INDEX * 2 + 1;x++)
+        {
+            for (int y = 0; y < CELL_MAX_INDEX * 2; y++)
+            {
+                var curCell = cells[x, y];
+                if (curCell == null)
+                {
+                    continue;
+                }
+                var nextCell = cells[x, y + 1];
+                if (nextCell == null)
+                {
+                    y++;
+                    continue;
+                }
+
+                Debug.Log("cur " + curCell.number + " next " + nextCell.number);
+                if (curCell.number == nextCell.number)
+                {
+                    isChecked = true;
+                    if (Math.Abs(curCell.corX - CELL_MAX_INDEX) > Math.Abs(nextCell.corX - CELL_MAX_INDEX))
+                    {
+                        curCell.MergeTo(nextCell);
+                    }
+                    else
+                    {
+                        nextCell.MergeTo(curCell);
+                    }
+                    
+                    y++;
+                }
+            }
+        }
+
+        for (int y = 0; y < CELL_MAX_INDEX * 2 + 1; y++)
+        {
+            for (int x = 0; x < CELL_MAX_INDEX * 2; x++)
+            {
+                var curCell = cells[x, y];
+                if (curCell == null)
+                {
+                    continue;
+                }
+                var nextCell = cells[x + 1, y];
+                if (nextCell == null)
+                {
+                    x++;
+                    continue;
+                }
+
+                if (curCell.number == nextCell.number)
+                {
+                    isChecked = true;
+                    if (Math.Abs(curCell.corY - CELL_MAX_INDEX) > Math.Abs(nextCell.corY - CELL_MAX_INDEX))
+                    {
+                        curCell.MergeTo(nextCell);
+                    }
+                    else
+                    {
+                        nextCell.MergeTo(curCell);
+                    }
+                    x++;
+                }
+            }
+        }
+
+        if (isChecked)
+        {
+            StartCoroutine(DelayCheckCells());
+        }else
+        {
+            _fsm.ChangeState(PlayState.Rotating);
+        }
+
+    }
+
+    IEnumerator DelayCheckCells()
+    {
+        yield return new WaitForSeconds(0.15f);
+        CheckCellsMerge();
     }
 
     float cell_y_pos = 0f;
@@ -141,6 +314,7 @@ public class LevelMgr :MonoBehaviour
 
         uiMgr.SetStateText("Playing");
         _currentCell =  GenerateCell();
+        GenerateCellsAtEnter();
         yield return new WaitForSeconds(0.3f);
         _isIndicatorActive = false;
         _indicator.gameObject.SetActive(false);
@@ -229,7 +403,7 @@ public class LevelMgr :MonoBehaviour
     {
 
         yield return new WaitForSeconds(0.5f);
-        _fsm.ChangeState(PlayState.Rotating);
+        CheckCellsMerge();
 
     }
     #endregion
