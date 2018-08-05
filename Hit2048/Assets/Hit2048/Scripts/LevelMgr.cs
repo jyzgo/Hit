@@ -143,7 +143,8 @@ public class LevelMgr :MonoBehaviour
         {
             int x = xlist[i];
             int y = ylist[i];
-            var curCell = GenerateCell();
+            var curCell = GenerateCell(true);
+            
             SetCells(x, y,curCell);
 
             curCell.transform.parent = RotateCircle.transform;
@@ -245,10 +246,11 @@ public class LevelMgr :MonoBehaviour
     }
 
     float cell_y_pos = 0f;
-    Cell GenerateCell()
+    Cell GenerateCell(bool isAttached = false)
     {
         var cellGb = Instantiate<GameObject>(CellPrefab);
         var cell = cellGb.GetComponent<Cell>();
+        cell.isAttached = isAttached;
         int ran = MTRandom.GetRandomInt(1, 9);
         cell.SetNum(ran);
         //cell.transform.position = new Vector3(0.3f * ran, -1, 0);
@@ -402,7 +404,7 @@ public class LevelMgr :MonoBehaviour
     IEnumerator Shooting_Enter()
     {
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.8f);
         CheckCellsMerge();
 
     }

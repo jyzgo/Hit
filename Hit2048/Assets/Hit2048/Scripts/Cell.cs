@@ -59,7 +59,7 @@ public class Cell : MonoBehaviour {
         }
         CellCenterTrans.rotation = Quaternion.identity; 
     }
-    bool isAttached = false;
+    public bool isAttached = false;
 
     const float CELL_SIZE = 0.426f;
     private void OnTriggerEnter2D(Collider2D collision)
