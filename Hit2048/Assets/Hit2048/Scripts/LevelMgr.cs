@@ -17,6 +17,26 @@ enum PlayState
     Lose
 };
 
+public class Unit
+{
+    public Unit(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+    public Unit up = null;
+    public Unit down = null;
+    public Unit left= null;
+    public Unit right = null;
+    public int x = 0;
+    public int y = 0;
+    public Cell cell = null;
+
+
+}
+
+
+
 
 public class LevelMgr :MonoBehaviour
 {
@@ -24,6 +44,7 @@ public class LevelMgr :MonoBehaviour
 
     public static LevelMgr Current;
 
+    public Unit[,] grids = new Unit[MAX_SIZE,MAX_SIZE];
 
     StateMachine<PlayState> _fsm;
     UIMgr uiMgr;
@@ -38,8 +59,48 @@ public class LevelMgr :MonoBehaviour
         mainCam = Camera.main;
         _indicator = GetComponentInChildren<Indicator>();
         _indicator.gameObject.SetActive(false);
+        InitGrid();
 
     }
+
+    void InitGrid()
+    {
+        for (int x = 0; x < MAX_SIZE; x++)
+        {
+            for (int y = 0; y < MAX_SIZE; y++)
+            {
+                grids[x, y] = new Unit(x,y);
+            }
+        }
+
+        for (int x = 0; x < MAX_SIZE; x++)
+        {
+            for (int y = 0; y < MAX_SIZE; y++)
+            {
+                var curUnit = grids[x, y];
+                if (x > 0)
+                {
+                    curUnit.left = grids[x - 1, y];
+                }
+
+                if (x < MAX_SIZE - 1)
+                {
+                    curUnit.right = grids[x + 1, y];
+                }
+
+                if (y > 0)
+                {
+                    curUnit.down = grids[x, y - 1];
+                }
+
+                if (y < MAX_SIZE - 1)
+                {
+                    curUnit.up = grids[x, y + 1];
+                }
+            }
+        }
+    }
+    
 
     public Indicator _indicator;
 
@@ -49,6 +110,12 @@ public class LevelMgr :MonoBehaviour
         Init();
     }
 
+    List<Cell> _existCells = new List<Cell>();
+
+    public void RemoveCell(Cell cell)
+    {
+        _existCells.Remove(cell);
+    }
 
 	// Use this for initialization
 	void Start () {
@@ -77,86 +144,25 @@ public class LevelMgr :MonoBehaviour
 
     const int CELL_MAX_INDEX = 10;
     const int MAX_SIZE = CELL_MAX_INDEX * 2 + 1;
-    Cell[,] cells = new Cell[MAX_SIZE,MAX_SIZE];
 
     public void SetCells(int x,int y,Cell cell)
     {
         Debug.Log("set cells x" + x + "y" + y);
-        Debug.Assert(cells[x, y] == null);
-        cells[x, y] = cell;
+        Debug.Assert(grids[x,y].cell == null);
+        grids[x, y].cell = cell;
+        cell.unit = grids[x, y];
+        _existCells.Add(cell);
+
 
     }
 
     public void GenerateCellsAtEnter(int n = 2)
     {
-        List<int> xlist = new List<int>();
-        List<int> ylist = new List<int>();
-        for (int x = 1; x < MAX_SIZE -1; x++)
-        {
-            for(int y = 1; y < MAX_SIZE -1; y++)
-            {
-                if (x == y && x == 10)
-                {
-                    continue;
-                }
-                var curCell = cells[x, y];
-                if (curCell == null)
-                {
-                    continue;
-                }
+        DataUtil.ShuffleList<Cell>(_existCells);
 
-                Debug.Log("x " + x + " y " + y);
-                if (cells[x + 1, y] == null)
-                {
-                    xlist.Add(x + 1);
-                    ylist.Add(y);
-                }
-                if (cells[x, y + 1]== null)
-                {
-                    xlist.Add(x);
-                    ylist.Add(y + 1);
-                }
-                if (cells[x - 1, y] == null)
-                {
-                    xlist.Add(x - 1);
-                    ylist.Add(y);
-                }
-                if (cells[x, y - 1] == null)
-                {
-                    xlist.Add(x);
-                    ylist.Add(y - 1);
-                }
-            }
-        }
-
-        List<int> indexList = new List<int>();
-        for (int i = 0; i < xlist.Count; i++)
-        {
-            indexList.Add(i);
-        }
-
-        Debug.Log("LIST " + xlist.Count);
-
-        DataUtil.ShuffleList<int>(indexList);
-
-        for (int i = 0; i < indexList.Count && i < n; i++)
-        {
-            int x = xlist[i];
-            int y = ylist[i];
-            var curCell = GenerateCell(true);
-            
-            SetCells(x, y,curCell);
-
-            curCell.transform.parent = RotateCircle.transform;
-            curCell.transform.localPosition = new Vector3((x - 10) * CELL_WIDTH, (y - 10) * CELL_WIDTH, 0);
-
-            
-
-        }
-
-
-        //MTUnity.Actions
-        MTRandom.GetRandomInt(0,1);
+        
+       
+        
     }
 
     public void CheckCellsMerge()
@@ -167,12 +173,12 @@ public class LevelMgr :MonoBehaviour
         {
             for (int y = 0; y < CELL_MAX_INDEX * 2; y++)
             {
-                var curCell = cells[x, y];
+                var curCell = grids[x, y].cell;
                 if (curCell == null)
                 {
                     continue;
                 }
-                var nextCell = cells[x, y + 1];
+                var nextCell = grids[x, y + 1].cell;
                 if (nextCell == null)
                 {
                     y++;
@@ -201,12 +207,12 @@ public class LevelMgr :MonoBehaviour
         {
             for (int x = 0; x < CELL_MAX_INDEX * 2; x++)
             {
-                var curCell = cells[x, y];
+                var curCell = grids[x, y].cell;
                 if (curCell == null)
                 {
                     continue;
                 }
-                var nextCell = cells[x + 1, y];
+                var nextCell = grids[x + 1, y].cell;
                 if (nextCell == null)
                 {
                     x++;

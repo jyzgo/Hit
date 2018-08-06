@@ -29,6 +29,8 @@ public class Cell : MonoBehaviour {
         CellCenter.color = c;
     }
 
+    public Unit unit = null;
+
     public int number = 2;
     int pow = 0;
     public void SetNum(int n)
@@ -104,6 +106,7 @@ public class Cell : MonoBehaviour {
     {
         this.RunActions(new MTMoveTo(0.1f, anotherCell.transform.position + Vector3.back), new MTCallFunc(() =>
         {
+            LevelMgr.Current.RemoveCell(this);
             anotherCell.IncreaseNum();
                 }),new MTDestroy());
     }
