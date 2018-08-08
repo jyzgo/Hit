@@ -31,6 +31,7 @@ public class Unit
     public int x = 0;
     public int y = 0;
     public Cell cell = null;
+    public bool isCenter = false;
 
 
 }
@@ -77,7 +78,13 @@ public class LevelMgr :MonoBehaviour
         {
             for (int y = 0; y < MAX_SIZE; y++)
             {
+            
+                
                 var curUnit = grids[x, y];
+                if (x == 10 && y == 10)
+                {
+                    curUnit.isCenter = true;
+                }
                 if (x > 0)
                 {
                     curUnit.left = grids[x - 1, y];
@@ -159,6 +166,41 @@ public class LevelMgr :MonoBehaviour
     public void GenerateCellsAtEnter(int n = 2)
     {
         DataUtil.ShuffleList<Cell>(_existCells);
+        List<Unit> _availableUnits = new List<Unit>();
+        for (int i = 0; i < _existCells.Count; i++)
+        {
+            var curUnit = _existCells[i].unit;
+            if (curUnit.up != null && !curUnit.up.isCenter && curUnit.up.cell == null)
+            {
+                _availableUnits.Add(curUnit.up);
+            }
+
+            if (curUnit.right != null && !curUnit.right.isCenter && curUnit.right.cell == null)
+            {
+                _availableUnits.Add(curUnit.right);
+            }
+
+            if (curUnit.down != null && !curUnit.down.isCenter && curUnit.down.cell == null)
+            {
+                _availableUnits.Add(curUnit.down);
+            }
+
+            if (curUnit.left != null && !curUnit.left.isCenter && curUnit.left.cell == null)
+            {
+                _availableUnits.Add(curUnit.left);
+            }
+
+        }
+
+        for (int i = 0; i < _availableUnits.Count && i < n; i++)
+        {
+            var newGenCell = GenerateCell(true);
+            var curUnit = _availableUnits[i];
+            curUnit.cell = newGenCell;
+            newGenCell.unit = curUnit;
+            newGenCell.transform.parent = RotateCircle.transform;
+            newGenCell.SetPostion(curUnit.x, curUnit.y);
+        }
 
         
        

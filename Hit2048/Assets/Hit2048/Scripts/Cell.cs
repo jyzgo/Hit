@@ -113,13 +113,21 @@ public class Cell : MonoBehaviour {
 
     public int corX = 0;
     public int corY = 0;
-    void SetLocalCoord()
+    public void SetLocalCoord()
     {
         corX = (int)(Math.Round(transform.localPosition.x / CELL_SIZE)) + 10;
         corY =(int)(Math.Round(transform.localPosition.y / CELL_SIZE)) + 10;
 
         TestText.text = corX.ToString() +" "+  corY.ToString();
         LevelMgr.Current.SetCells(corX, corY, this);
+    }
+
+    public void SetPostion(int x, int y)
+    {
+        corX = x;
+        corY = y;
+        transform.localPosition = new Vector3((corX - 10) * CELL_SIZE, (corY - 10) * CELL_SIZE, 0);
+        transform.localRotation = Quaternion.identity;
     }
 
     private void IncreaseNum()
