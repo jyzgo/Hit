@@ -92,11 +92,14 @@ public class Cell : MonoBehaviour {
                 transform.position = anotherCell.transform.position + Vector3.down * 0.426f;
                 transform.SetParent(_center.transform);
                 this.RunAction(GetScale());
-            }else
+
+                SetLocalCoord();
+            }
+            else
             {
+
                 MergeTo(anotherCell); 
             }
-            SetLocalCoord();
 
         }
 
@@ -117,9 +120,13 @@ public class Cell : MonoBehaviour {
     {
         corX = (int)(Math.Round(transform.localPosition.x / CELL_SIZE)) + 10;
         corY =(int)(Math.Round(transform.localPosition.y / CELL_SIZE)) + 10;
-
-        TestText.text = corX.ToString() +" "+  corY.ToString();
+        SetTestText();
         LevelMgr.Current.SetCells(corX, corY, this);
+    }
+
+    public void SetTestText()
+    {
+        TestText.text = corX.ToString() +" "+  corY.ToString();
     }
 
     public void SetPostion(int x, int y)

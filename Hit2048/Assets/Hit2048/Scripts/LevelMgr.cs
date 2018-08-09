@@ -50,14 +50,12 @@ public class LevelMgr :MonoBehaviour
     StateMachine<PlayState> _fsm;
     UIMgr uiMgr;
     public RotateCenter RotateCircle { get; private set; }
-    Camera mainCam;
     public void Init()
     {
         Physics.gravity = new Vector3(0, -30.0F, 0);
         uiMgr = FindObjectOfType<UIMgr>();
         RotateCircle = GameObject.FindObjectOfType<RotateCenter>();
         _fsm = StateMachine<PlayState>.Initialize(this, PlayState.Ready);
-        mainCam = Camera.main;
         _indicator = GetComponentInChildren<Indicator>();
         _indicator.gameObject.SetActive(false);
         InitGrid();
@@ -163,7 +161,7 @@ public class LevelMgr :MonoBehaviour
 
     }
 
-    public void GenerateCellsAtEnter(int n = 2)
+    public void GenerateCellsAtEnter(int n = 1)
     {
         DataUtil.ShuffleList<Cell>(_existCells);
         List<Unit> _availableUnits = new List<Unit>();
@@ -200,6 +198,8 @@ public class LevelMgr :MonoBehaviour
             newGenCell.unit = curUnit;
             newGenCell.transform.parent = RotateCircle.transform;
             newGenCell.SetPostion(curUnit.x, curUnit.y);
+            newGenCell.SetTestText();
+            _existCells.Add(newGenCell);
         }
 
         
@@ -210,6 +210,8 @@ public class LevelMgr :MonoBehaviour
     public void CheckCellsMerge()
     {
         Debug.Log("check");
+        _fsm.ChangeState(PlayState.Rotating);
+        return;
         bool isChecked = false;
         for (int x = 0; x < CELL_MAX_INDEX * 2 + 1;x++)
         {
@@ -299,7 +301,7 @@ public class LevelMgr :MonoBehaviour
         var cellGb = Instantiate<GameObject>(CellPrefab);
         var cell = cellGb.GetComponent<Cell>();
         cell.isAttached = isAttached;
-        int ran = MTRandom.GetRandomInt(1, 9);
+        int ran = MTRandom.GetRandomInt(2,3);
         cell.SetNum(ran);
         //cell.transform.position = new Vector3(0.3f * ran, -1, 0);
         Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 0));
@@ -381,7 +383,6 @@ public class LevelMgr :MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                var viewPos = new Vector3(touchPos.x / Screen.width, touchPos.y / Screen.height, 0f);
                 var pos = Camera.main.ScreenToWorldPoint(touchPos);
                 float x = (int)(pos.x /CELL_WIDTH) * CELL_WIDTH;
 

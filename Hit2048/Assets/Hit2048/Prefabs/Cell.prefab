@@ -200,6 +200,10 @@ MonoBehaviour:
   CellCenterTrans: {fileID: 4810696617958740}
   Number: {fileID: 212839885920620782}
   TestText: {fileID: 114866613396349290}
+  number: 2
+  isAttached: 0
+  corX: 0
+  corY: 0
 --- !u!114 &114258954442168864
 MonoBehaviour:
   m_ObjectHideFlags: 1
