@@ -31,9 +31,9 @@ public class Cell : MonoBehaviour {
 
     public Unit unit = null;
 
-    public int number = 2;
-    int pow = 0;
-    public void SetNum(int n)
+    int number = 2;
+    public int pow = 0;
+    public void SetPow(int n)
     {
         Debug.Assert(n > 0);
         pow = n;
@@ -87,7 +87,7 @@ public class Cell : MonoBehaviour {
         {
             isAttached = true;
             isCellActive = false;
-            if (anotherCell.number != this.number)
+            if (anotherCell.pow!= this.pow)
             {
                 transform.position = anotherCell.transform.position + Vector3.down * 0.426f;
                 transform.SetParent(_center.transform);
@@ -139,7 +139,7 @@ public class Cell : MonoBehaviour {
 
     private void IncreaseNum()
     {
-        SetNum(pow + 1);
+        SetPow(pow + 1);
         this.RunAction(GetScale());
     }
 
