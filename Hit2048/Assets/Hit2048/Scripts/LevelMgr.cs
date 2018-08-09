@@ -236,85 +236,91 @@ public class LevelMgr :MonoBehaviour
         
     }
 
+    
+
     public void CheckCellsMerge()
     {
         Debug.Log("check");
-        _fsm.ChangeState(PlayState.Rotating);
-        return;
-        //bool isChecked = false;
-        //for (int x = 0; x < CELL_MAX_INDEX * 2 + 1;x++)
-        //{
-        //    for (int y = 0; y < CELL_MAX_INDEX * 2; y++)
-        //    {
-        //        var curCell = grids[x, y].cell;
-        //        if (curCell == null)
-        //        {
-        //            continue;
-        //        }
-        //        var nextCell = grids[x, y + 1].cell;
-        //        if (nextCell == null)
-        //        {
-        //            y++;
-        //            continue;
-        //        }
+       // _fsm.ChangeState(PlayState.Rotating);
+        //return;
+        bool isChecked = false;
 
-        //        Debug.Log("cur " + curCell.number + " next " + nextCell.number);
-        //        if (curCell.number == nextCell.number)
-        //        {
-        //            isChecked = true;
-        //            if (Math.Abs(curCell.corX - CELL_MAX_INDEX) > Math.Abs(nextCell.corX - CELL_MAX_INDEX))
-        //            {
-        //                curCell.MergeTo(nextCell);
-        //            }
-        //            else
-        //            {
-        //                nextCell.MergeTo(curCell);
-        //            }
+        for (int x = 0; x < MAX_SIZE; x++)
+        {
+            for (int y = 0; y < MAX_SIZE - 1; y++)
+            {
+                var curCell = grids[x, y].cell;
+                if (curCell == null)
+                {
+                    continue;
+                }
+                var nextCell = grids[x, y + 1].cell;
+                if (nextCell == null)
+                {
+                    y++;
+                    continue;
+                }
+
+                Debug.Log("cur " + curCell.pow + " next " + nextCell.pow);
+                if (curCell.pow == nextCell.pow)
+                {
+                    isChecked = true;
+                    if (Math.Abs(curCell.corY - CELL_MAX_INDEX) > Math.Abs(nextCell.corY - CELL_MAX_INDEX))
+                    {
+                        curCell.MergeTo(nextCell);
+                    }
+                    else
+                    {
+                        nextCell.MergeTo(curCell);
+                    }
+
+                    y++;
+                }
+            }
+        }
+
+        for (int y = 0; y < MAX_SIZE ; y++)
+        {
+            for (int x = 0; x < MAX_SIZE-1; x++)
+            {
+                var curCell = grids[x, y].cell;
+                if (curCell == null)
+                {
+                    continue;
+                }
+                var nextCell = grids[x + 1, y].cell;
+                if (nextCell == null)
+                {
+                    x++;
+                    continue;
+                }
+
+                if (curCell.pow == nextCell.pow)
+                {
+                    isChecked = true;
+                    if (Math.Abs(curCell.corX - CELL_MAX_INDEX) > Math.Abs(nextCell.corX - CELL_MAX_INDEX))
+                    {
+                        curCell.MergeTo(nextCell);
+                    }
+                    else
+                    {
+                        nextCell.MergeTo(curCell);
+                    }
                     
-        //            y++;
-        //        }
-        //    }
-        //}
+                    //Debug.Break();
+                    x++;
+                }
+            }
+        }
 
-        //for (int y = 0; y < CELL_MAX_INDEX * 2 + 1; y++)
-        //{
-        //    for (int x = 0; x < CELL_MAX_INDEX * 2; x++)
-        //    {
-        //        var curCell = grids[x, y].cell;
-        //        if (curCell == null)
-        //        {
-        //            continue;
-        //        }
-        //        var nextCell = grids[x + 1, y].cell;
-        //        if (nextCell == null)
-        //        {
-        //            x++;
-        //            continue;
-        //        }
-
-        //        if (curCell.number == nextCell.number)
-        //        {
-        //            isChecked = true;
-        //            if (Math.Abs(curCell.corY - CELL_MAX_INDEX) > Math.Abs(nextCell.corY - CELL_MAX_INDEX))
-        //            {
-        //                curCell.MergeTo(nextCell);
-        //            }
-        //            else
-        //            {
-        //                nextCell.MergeTo(curCell);
-        //            }
-        //            x++;
-        //        }
-        //    }
-        //}
-
-        //if (isChecked)
-        //{
-        //    StartCoroutine(DelayCheckCells());
-        //}else
-        //{
-        //    _fsm.ChangeState(PlayState.Rotating);
-        //}
+        if (isChecked)
+        {
+            StartCoroutine(DelayCheckCells());
+        }
+        else
+        {
+            _fsm.ChangeState(PlayState.Rotating);
+        }
 
     }
 

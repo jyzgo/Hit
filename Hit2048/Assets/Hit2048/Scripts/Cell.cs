@@ -107,8 +107,12 @@ public class Cell : MonoBehaviour {
 
     public void MergeTo(Cell anotherCell)
     {
-        this.RunActions(new MTMoveTo(0.1f, anotherCell.transform.position + Vector3.back), new MTCallFunc(() =>
+        this.RunActions(new MTMoveTo(0.1f, anotherCell.transform.position+ Vector3.back,true), new MTCallFunc(() =>
         {
+            if (unit != null)
+            {
+                unit.cell = null;
+            }
             LevelMgr.Current.RemoveCell(this);
             anotherCell.IncreaseNum();
                 }),new MTDestroy());
