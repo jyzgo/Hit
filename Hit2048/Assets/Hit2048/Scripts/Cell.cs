@@ -48,6 +48,12 @@ public class Cell : MonoBehaviour {
    
     }
 
+    internal void MoveToUnit()
+    {
+        var tarPos = TargetPos();
+        this.RunAction(new MTMoveTo(0.1f, tarPos));
+    }
+
     bool isCellActive = false;
     internal void SetActive()
     {
@@ -98,16 +104,20 @@ public class Cell : MonoBehaviour {
             else
             {
 
-                MergeTo(anotherCell); 
+                MergeTo(anotherCell);
+                LevelMgr.Current.DelayCheckMerge();
             }
 
         }
 
     }
 
+    public const float MERGE_TIME = 0.1f;
+    public bool isMerging = false;
     public void MergeTo(Cell anotherCell)
     {
-        this.RunActions(new MTMoveTo(0.1f, anotherCell.transform.position+ Vector3.back,true), new MTCallFunc(() =>
+        isMerging = true;
+        this.RunActions(new MTMoveTo(MERGE_TIME, anotherCell.transform.position+ Vector3.back,true), new MTCallFunc(() =>
         {
             if (unit != null)
             {
@@ -137,8 +147,13 @@ public class Cell : MonoBehaviour {
     {
         corX = x;
         corY = y;
-        transform.localPosition = new Vector3((corX - 10) * CELL_SIZE, (corY - 10) * CELL_SIZE, 0);
+        transform.localPosition = TargetPos();
         transform.localRotation = Quaternion.identity;
+    }
+
+    Vector3 TargetPos()
+    {
+        return new Vector3((corX - 10) * CELL_SIZE, (corY - 10) * CELL_SIZE, 0);
     }
 
     private void IncreaseNum()

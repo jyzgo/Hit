@@ -28,7 +28,7 @@ public class Unit
     }
     public Unit up = null;
     public Unit down = null;
-    public Unit left= null;
+    public Unit left = null;
     public Unit right = null;
     public int x = 0;
     public int y = 0;
@@ -36,18 +36,108 @@ public class Unit
     public bool isCenter = false;
 
 
+    private void SetCell(Cell c)
+    {
+        if (c == null || c.unit == null || cell == null)
+        {
+            return;
+
+        }
+//        Debug.Assert(c.unit == null);
+  //      Debug.Assert(this.cell == null);
+        this.cell = c;
+        cell.corX = x;
+        cell.corY = y;
+        this.cell.unit = this;
+    }
+
+    Cell CleanCell()
+    {
+        var tcell = cell;
+        tcell.unit = null;
+        this.cell = null;
+
+        return tcell;
+    }
+    internal void MoveUp()
+    {
+        if (cell != null)
+        {
+            var tcell = CleanCell();
+            up.cell = null;
+            up.SetCell(tcell);
+            tcell.MoveToUnit();
+
+
+            if (down != null)
+            {
+                down.MoveUp();
+            }
+        }
+
+    }
+
+    internal void MoveDown()
+    {
+        if (cell != null)
+        {
+            var tcell = CleanCell();
+            down.cell = null;
+            down.SetCell(tcell);
+            tcell.MoveToUnit();
+
+            if (up != null)
+            {
+                up.MoveDown();
+            }
+        }
+
+
+    }
+
+    internal void MoveLeft()
+    {
+        if (cell != null)
+        {
+            var tcell = CleanCell();
+            left.cell = null;
+            left.SetCell(tcell);
+            tcell.MoveToUnit();
+            if (right != null)
+            {
+                right.MoveLeft();
+            }
+        }
+
+
+    }
+
+    internal void MoveRight()
+    {
+        if (cell != null)
+        {
+            var tcell = CleanCell();
+            right.cell = null;
+            right.SetCell(tcell);
+            tcell.MoveToUnit();
+            if (left != null)
+            {
+                left.MoveRight();
+            }
+        }
+    }
 }
 
 
 
 
-public class LevelMgr :MonoBehaviour
+public class LevelMgr : MonoBehaviour
 {
-    
+
 
     public static LevelMgr Current;
 
-    public Unit[,] grids = new Unit[MAX_SIZE,MAX_SIZE];
+    public Unit[,] grids = new Unit[MAX_SIZE, MAX_SIZE];
 
     StateMachine<PlayState> _fsm;
     UIMgr uiMgr;
@@ -61,7 +151,7 @@ public class LevelMgr :MonoBehaviour
         _indicator = GetComponentInChildren<Indicator>();
         _indicator.gameObject.SetActive(false);
         InitGrid();
-   
+
 
     }
 
@@ -71,7 +161,7 @@ public class LevelMgr :MonoBehaviour
         {
             for (int y = 0; y < MAX_SIZE; y++)
             {
-                grids[x, y] = new Unit(x,y);
+                grids[x, y] = new Unit(x, y);
             }
         }
 
@@ -79,8 +169,8 @@ public class LevelMgr :MonoBehaviour
         {
             for (int y = 0; y < MAX_SIZE; y++)
             {
-            
-                
+
+
                 var curUnit = grids[x, y];
                 if (x == 10 && y == 10)
                 {
@@ -108,7 +198,7 @@ public class LevelMgr :MonoBehaviour
             }
         }
     }
-    
+
 
     public Indicator _indicator;
 
@@ -125,15 +215,17 @@ public class LevelMgr :MonoBehaviour
         _existCells.Remove(cell);
     }
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
 
-	}
+    }
 
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     #region Ready
     void Ready_Enter()
@@ -141,7 +233,7 @@ public class LevelMgr :MonoBehaviour
 
         uiMgr.SetStateText("Get Ready!");
         Reset();
-       // _fsm.ChangeState(PlayState.Playing);
+        // _fsm.ChangeState(PlayState.Playing);
     }
 
     bool _isNumberOk = false;
@@ -153,10 +245,14 @@ public class LevelMgr :MonoBehaviour
     const int CELL_MAX_INDEX = 10;
     const int MAX_SIZE = CELL_MAX_INDEX * 2 + 1;
 
-    public void SetCells(int x,int y,Cell cell)
+    public void SetCells(int x, int y, Cell cell)
     {
-        Debug.Log("set cells x" + x + "y" + y);
-        Debug.Assert(grids[x,y].cell == null);
+       // Debug.Log("set cells x" + x + "y" + y);
+       // Debug.Assert(grids[x, y].cell == null);
+        if (grids[x, y] == null)
+        {
+            return;
+        }
         grids[x, y].cell = cell;
         cell.unit = grids[x, y];
         _existCells.Add(cell);
@@ -171,6 +267,7 @@ public class LevelMgr :MonoBehaviour
         for (int i = 0; i < _existCells.Count; i++)
         {
             var curUnit = _existCells[i].unit;
+
             if (curUnit.up != null && !curUnit.up.isCenter && curUnit.up.cell == null)
             {
                 _availableUnits.Add(curUnit.up);
@@ -196,11 +293,11 @@ public class LevelMgr :MonoBehaviour
         for (int i = 0; i < _availableUnits.Count && i < n; i++)
         {
             var curUnit = _availableUnits[i];
-            Debug.Log("cur unit x " + curUnit.x + " y " + curUnit.y);
+
             HashSet<int> numSet = new HashSet<int> { 1, 2, 3, 4, 5 };
             if (curUnit.up != null && curUnit.up.cell != null)
             {
-               numSet.Remove(curUnit.up.cell.pow);
+                numSet.Remove(curUnit.up.cell.pow);
 
             }
             if (curUnit.right != null && curUnit.right.cell != null)
@@ -218,11 +315,11 @@ public class LevelMgr :MonoBehaviour
                 numSet.Remove(curUnit.left.cell.pow);
             }
 
-      // Debug.Break();
+            // Debug.Break();
 
             List<int> numList = numSet.ToList<int>();
-            var newGenCell = GenerateCell(numList,true);
-            
+            var newGenCell = GenerateCell(numList, true);
+
             curUnit.cell = newGenCell;
             newGenCell.unit = curUnit;
             newGenCell.transform.parent = RotateCircle.transform;
@@ -230,18 +327,85 @@ public class LevelMgr :MonoBehaviour
             newGenCell.SetTestText();
             _existCells.Add(newGenCell);
         }
-        
-        
-       
-        
+
+
+
+
     }
 
-    
+    //public void CheckCollapse()
+    //{
+    //    bool isChecked = false;
+
+    //    for(int x =0; x < MAX_SIZE; x++)
+    //    {
+    //        grids[x, 10].up.MoveDown();
+    //        grids[x, 10].down.MoveUp();
+    //    }
+
+        
+    //}
+
+
+    void CheckCorY(Unit u)
+    {
+        if (u == null)
+        {
+            return;
+        }
+        if (u.y > CELL_MAX_INDEX)
+        {
+            if (u == null)
+            {
+                return;
+            }
+
+            if (u.up != null)
+            {
+                u.up.MoveDown();
+            }
+            
+        }
+        else
+        {
+            if (u.down != null)
+            {
+                u.down.MoveUp();
+            }
+        }
+    }
+
+    void CheckCorX(Unit u)
+    {
+        if (u == null)
+        {
+            return;
+        }
+        if (u.x > CELL_MAX_INDEX)
+        {
+            if (u.right != null)
+            {
+                u.right.MoveLeft();
+            }
+        }
+        else
+        {
+            if (u.left != null)
+            {
+                u.left.MoveRight();
+            }
+        }
+    }
+
+    public void DelayCheckMerge()
+    {
+        StartCoroutine(DelayCheckCells()); 
+    }
 
     public void CheckCellsMerge()
     {
-        Debug.Log("check");
-       // _fsm.ChangeState(PlayState.Rotating);
+
+        // _fsm.ChangeState(PlayState.Rotating);
         //return;
         bool isChecked = false;
 
@@ -250,48 +414,59 @@ public class LevelMgr :MonoBehaviour
             for (int y = 0; y < MAX_SIZE - 1; y++)
             {
                 var curCell = grids[x, y].cell;
-                if (curCell == null)
+                if (curCell == null || curCell.isMerging)
                 {
                     continue;
                 }
                 var nextCell = grids[x, y + 1].cell;
                 if (nextCell == null)
                 {
-                    y++;
+                    //y++;
                     continue;
                 }
 
-                Debug.Log("cur " + curCell.pow + " next " + nextCell.pow);
                 if (curCell.pow == nextCell.pow)
                 {
                     isChecked = true;
                     if (Math.Abs(curCell.corY - CELL_MAX_INDEX) > Math.Abs(nextCell.corY - CELL_MAX_INDEX))
                     {
+                        var curUnit = curCell.unit;
                         curCell.MergeTo(nextCell);
+                        curCell.unit = null;
+                        CheckCorY(curUnit);             
                     }
                     else
                     {
+                        var curUnit = nextCell.unit;
                         nextCell.MergeTo(curCell);
-                    }
+                        nextCell.unit = null;
+                        CheckCorY(curUnit);
 
+                    }
                     y++;
                 }
             }
         }
 
-        for (int y = 0; y < MAX_SIZE ; y++)
+        if (isChecked)
         {
-            for (int x = 0; x < MAX_SIZE-1; x++)
+            StartCoroutine(DelayCheckCells());
+            return;
+        }
+
+        for (int y = 0; y < MAX_SIZE; y++)
+        {
+            for (int x = 0; x < MAX_SIZE - 1; x++)
             {
                 var curCell = grids[x, y].cell;
-                if (curCell == null)
+                if (curCell == null || curCell.isMerging)
                 {
                     continue;
                 }
                 var nextCell = grids[x + 1, y].cell;
                 if (nextCell == null)
                 {
-                    x++;
+                    //x++;
                     continue;
                 }
 
@@ -300,13 +475,21 @@ public class LevelMgr :MonoBehaviour
                     isChecked = true;
                     if (Math.Abs(curCell.corX - CELL_MAX_INDEX) > Math.Abs(nextCell.corX - CELL_MAX_INDEX))
                     {
+
+                        var curUnit = curCell.unit;
                         curCell.MergeTo(nextCell);
+                        curCell.unit = null;
+                        CheckCorX(curUnit);
                     }
                     else
                     {
+                        var curUnit = nextCell.unit;
                         nextCell.MergeTo(curCell);
+                        nextCell.unit = null;
+                        CheckCorX(curUnit);
+
                     }
-                    
+
                     //Debug.Break();
                     x++;
                 }
@@ -331,7 +514,7 @@ public class LevelMgr :MonoBehaviour
     }
 
     float cell_y_pos = 0f;
-    Cell GenerateCell(List<int> numCandidate,bool isAttached = false)
+    Cell GenerateCell(List<int> numCandidate, bool isAttached = false)
     {
         var cellGb = Instantiate<GameObject>(CellPrefab);
         var cell = cellGb.GetComponent<Cell>();
@@ -341,22 +524,22 @@ public class LevelMgr :MonoBehaviour
         cell.SetPow(ran);
         //cell.transform.position = new Vector3(0.3f * ran, -1, 0);
         Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 0));
-        cell.transform.position = worldPoint + Vector3.up*0.5f +Vector3.forward * 10f;
+        cell.transform.position = worldPoint + Vector3.up * 0.5f + Vector3.forward * 10f;
         cell_y_pos = cell.transform.position.y;
         cell.transform.localScale = Vector3.one * 0.01f;
-        
+
         cell.RunAction(GetScale());
         return cell;
     }
 
     public MTFiniteTimeAction GetScale()
     {
-        return new MTSequence(new MTScaleTo(0.15f,1.2f),new MTScaleTo(0.15f,0.8f),new MTScaleTo(0.1f,1f));
+        return new MTSequence(new MTScaleTo(0.15f, 1.2f), new MTScaleTo(0.15f, 0.8f), new MTScaleTo(0.1f, 1f));
     }
 
     void Ready_Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             OnClick(Vector3.zero);
         }
@@ -402,7 +585,7 @@ public class LevelMgr :MonoBehaviour
 
         uiMgr.SetStateText("Playing");
         List<int> numList = new List<int> { 1, 2, 3 };
-        _currentCell =  GenerateCell(numList,false);
+        _currentCell = GenerateCell(numList, false);
         GenerateCellsAtEnter();
         yield return new WaitForSeconds(0.3f);
         _isIndicatorActive = false;
@@ -412,24 +595,25 @@ public class LevelMgr :MonoBehaviour
 
 
 
-    const float CELL_WIDTH= 0.426f;
+    const float CELL_WIDTH = 0.426f;
     void Playing_Update()
     {
         var touchPos = Input.mousePosition;
-        if(_currentCell != null)
+        if (_currentCell != null)
         {
             if (Input.GetMouseButton(0))
             {
                 var pos = Camera.main.ScreenToWorldPoint(touchPos);
-                float x = (int)(pos.x /CELL_WIDTH) * CELL_WIDTH;
+                float x = (int)(pos.x / CELL_WIDTH) * CELL_WIDTH;
 
                 var tarPos = new Vector3(x, cell_y_pos, 0);
-                _currentCell.transform.position =tarPos;
+                _currentCell.transform.position = tarPos;
                 _indicator.transform.position = tarPos;
                 _isIndicatorActive = true;
                 _indicator.gameObject.SetActive(true);
-               
-            }else
+
+            }
+            else
             {
                 if (_isIndicatorActive)
                 {
@@ -440,23 +624,23 @@ public class LevelMgr :MonoBehaviour
                     _indicator.gameObject.SetActive(false);
                 }
             }
-                 
+
         }
 
- 
+
 
     }
 
     void Playing_OnExit()
     {
-       
+
     }
 
     #endregion
 
 
     Number _number = null;
- 
+
     public void Touch()
     {
         Debug.Log("Touch");
@@ -477,10 +661,12 @@ public class LevelMgr :MonoBehaviour
     float _currentAngle = 0f;
     IEnumerator Rotating_Enter()
     {
-
         yield return new WaitForSeconds(ROTATE_INTERVAL);
+
+
         _currentAngle -= 90f;
-        RotateCircle.RunActions(new MTRotateTo(ROTATE_INTERVAL, new Vector3(0,0,_currentAngle)));
+        RotateCircle.RunActions(new MTRotateTo(ROTATE_INTERVAL, new Vector3(0, 0, _currentAngle)));
+        yield return new WaitForSeconds(ROTATE_INTERVAL);
         _fsm.ChangeState(PlayState.Playing);
 
     }

@@ -96,7 +96,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4233415348166822
 Transform:
   m_ObjectHideFlags: 1
@@ -200,8 +200,9 @@ MonoBehaviour:
   CellCenterTrans: {fileID: 4810696617958740}
   Number: {fileID: 212839885920620782}
   TestText: {fileID: 114866613396349290}
-  number: 2
+  pow: 0
   isAttached: 0
+  isMerging: 0
   corX: 0
   corY: 0
 --- !u!114 &114258954442168864
