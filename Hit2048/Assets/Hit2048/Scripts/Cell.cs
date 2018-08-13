@@ -86,6 +86,8 @@ public class Cell : MonoBehaviour {
             transform.SetParent(_center.transform);
             this.RunAction(GetScale());
             SetLocalCoord();
+            LevelMgr.Current.DelayCheckMerge();
+            return;
         }
 
         Cell anotherCell = collision.GetComponent<Cell>();
@@ -105,8 +107,8 @@ public class Cell : MonoBehaviour {
             {
 
                 MergeTo(anotherCell);
-                LevelMgr.Current.DelayCheckMerge();
             }
+            LevelMgr.Current.DelayCheckMerge();
 
         }
 
@@ -123,7 +125,7 @@ public class Cell : MonoBehaviour {
             {
                 unit.cell = null;
             }
-            LevelMgr.Current.RemoveCell(this);
+
             anotherCell.IncreaseNum();
                 }),new MTDestroy());
     }

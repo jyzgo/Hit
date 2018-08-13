@@ -38,13 +38,13 @@ public class Unit
 
     private void SetCell(Cell c)
     {
-        if (c == null || c.unit == null || cell == null)
-        {
-            return;
+        //if (c == null || c.unit == null || cell == null)
+        //{
+        //    return;
 
-        }
-//        Debug.Assert(c.unit == null);
-  //      Debug.Assert(this.cell == null);
+        //}
+        Debug.Assert(c.unit == null);
+        Debug.Assert(this.cell == null);
         this.cell = c;
         cell.corX = x;
         cell.corY = y;
@@ -144,7 +144,7 @@ public class LevelMgr : MonoBehaviour
     public RotateCenter RotateCircle { get; private set; }
     public void Init()
     {
-        Physics.gravity = new Vector3(0, -30.0F, 0);
+        //Physics.gravity = new Vector3(0, -30.0F, 0);
         uiMgr = FindObjectOfType<UIMgr>();
         RotateCircle = GameObject.FindObjectOfType<RotateCenter>();
         _fsm = StateMachine<PlayState>.Initialize(this, PlayState.Ready);
@@ -208,24 +208,10 @@ public class LevelMgr : MonoBehaviour
         Init();
     }
 
-    List<Cell> _existCells = new List<Cell>();
 
-    public void RemoveCell(Cell cell)
-    {
-        _existCells.Remove(cell);
-    }
 
-    // Use this for initialization
-    void Start()
-    {
 
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     #region Ready
     void Ready_Enter()
@@ -236,7 +222,6 @@ public class LevelMgr : MonoBehaviour
         // _fsm.ChangeState(PlayState.Playing);
     }
 
-    bool _isNumberOk = false;
     internal void Hitted(int num)
     {
     }
@@ -255,44 +240,59 @@ public class LevelMgr : MonoBehaviour
         }
         grids[x, y].cell = cell;
         cell.unit = grids[x, y];
-        _existCells.Add(cell);
 
 
     }
 
-    public void GenerateCellsAtEnter(int n = 1)
+    public void GenerateCellsAtEnter(int n = 5)
     {
-        DataUtil.ShuffleList<Cell>(_existCells);
-        List<Unit> _availableUnits = new List<Unit>();
-        for (int i = 0; i < _existCells.Count; i++)
+       HashSet<Unit> candidateUnitSet = new HashSet<Unit>();
+        for (int x = 0; x < MAX_SIZE; x++)
         {
-            var curUnit = _existCells[i].unit;
-
-            if (curUnit.up != null && !curUnit.up.isCenter && curUnit.up.cell == null)
+            for (int y = 0; y < MAX_SIZE; y++)
             {
-                _availableUnits.Add(curUnit.up);
-            }
+                var curUnit = grids[x, y];
+                if (curUnit.isCenter)
+                {
+                    continue;
+                }
 
-            if (curUnit.right != null && !curUnit.right.isCenter && curUnit.right.cell == null)
-            {
-                _availableUnits.Add(curUnit.right);
-            }
+                if (curUnit.cell != null)
+                {
+                    continue;
+                }
+                if (curUnit.up != null && curUnit.up.cell != null)
+                {
+                    candidateUnitSet.Add(curUnit);
+                    continue;
+                }
 
-            if (curUnit.down != null && !curUnit.down.isCenter && curUnit.down.cell == null)
-            {
-                _availableUnits.Add(curUnit.down);
-            }
+                if (curUnit.right != null && curUnit.right.cell != null)
+                {
+                    candidateUnitSet.Add(curUnit);
+                    continue;
+                }
 
-            if (curUnit.left != null && !curUnit.left.isCenter && curUnit.left.cell == null)
-            {
-                _availableUnits.Add(curUnit.left);
-            }
+                if (curUnit.down != null && curUnit.down.cell != null)
+                {
+                    candidateUnitSet.Add(curUnit);
+                    continue;
+                }
 
+                if (curUnit.left != null && curUnit.left.cell != null)
+                {
+                    candidateUnitSet.Add(curUnit);
+                }
+            }
         }
 
-        for (int i = 0; i < _availableUnits.Count && i < n; i++)
+        List<Unit> candidateUnits = candidateUnitSet.ToList<Unit>();
+        DataUtil.ShuffleList<Unit>(candidateUnits);
+
+
+        for (int i = 0; i < candidateUnits.Count && i < n; i++)
         {
-            var curUnit = _availableUnits[i];
+            var curUnit = candidateUnits[i];
 
             HashSet<int> numSet = new HashSet<int> { 1, 2, 3, 4, 5 };
             if (curUnit.up != null && curUnit.up.cell != null)
@@ -325,26 +325,12 @@ public class LevelMgr : MonoBehaviour
             newGenCell.transform.parent = RotateCircle.transform;
             newGenCell.SetPostion(curUnit.x, curUnit.y);
             newGenCell.SetTestText();
-            _existCells.Add(newGenCell);
         }
-
-
 
 
     }
 
-    //public void CheckCollapse()
-    //{
-    //    bool isChecked = false;
 
-    //    for(int x =0; x < MAX_SIZE; x++)
-    //    {
-    //        grids[x, 10].up.MoveDown();
-    //        grids[x, 10].down.MoveUp();
-    //    }
-
-        
-    //}
 
 
     void CheckCorY(Unit u)
@@ -509,7 +495,7 @@ public class LevelMgr : MonoBehaviour
 
     IEnumerator DelayCheckCells()
     {
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.2f);
         CheckCellsMerge();
     }
 
@@ -631,11 +617,6 @@ public class LevelMgr : MonoBehaviour
 
     }
 
-    void Playing_OnExit()
-    {
-
-    }
-
     #endregion
 
 
@@ -676,8 +657,8 @@ public class LevelMgr : MonoBehaviour
     IEnumerator Shooting_Enter()
     {
 
-        yield return new WaitForSeconds(0.8f);
-        CheckCellsMerge();
+        yield return new WaitForSeconds(0.1f);
+       // CheckCellsMerge();
 
     }
     #endregion
