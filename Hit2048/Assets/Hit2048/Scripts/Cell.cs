@@ -9,8 +9,10 @@ public enum BombType
 {
     
     Square,
-    Horizon,
-    Vertical,
+    Up,
+    Right,
+    Down,
+    Left,
     None
 }
 
@@ -53,21 +55,21 @@ public class Cell : MonoBehaviour {
     public int pow = 0;
     public void SetPow(int n)
     {
-        Debug.Assert(n > 0);
         pow = n;
-        var bgColor = ResMgr.Current.cbg[n - 1];
-        var cellColor = ResMgr.Current.Colors[n - 1];
+        var bgColor = ResMgr.Current.cbg[n  ];
+        var cellColor = ResMgr.Current.Colors[n];
         SetCenterColor(cellColor);
         SetBgColor(bgColor);
         if (pow < BOMBINDEX)
         {
             number = (int)System.Math.Pow(2, n);
-            Number.sprite = ResMgr.Current.Numbers[n - 1];
+            Number.sprite = ResMgr.Current.Numbers[n];
         }
         else
         {
             _cellType = CellType.Bomb;
-            int index = MTRandom.GetRandomInt(0, 2);
+            int index = MTRandom.GetRandomInt(0, 4);
+            _bombType = (BombType)index;
             Number.sprite = ResMgr.Current.Bombs[index];
             
 
@@ -124,11 +126,17 @@ public class Cell : MonoBehaviour {
             isCellActive = false;
             if (anotherCell.pow!= this.pow)
             {
+
+
                 transform.position = anotherCell.transform.position + Vector3.down * 0.426f;
                 transform.SetParent(_center.transform);
                 this.RunAction(GetScale());
 
                 SetLocalCoord();
+                if (anotherCell._cellType == CellType.Bomb)
+                {
+                    anotherCell.BombTrigger();
+                }
             }
             else
             {
@@ -139,6 +147,54 @@ public class Cell : MonoBehaviour {
 
         }
 
+    }
+
+    bool isBombTriggering = false;
+    private void BombTrigger()
+    {
+        isBombTriggering = true;
+        if (_bombType == BombType.Square)
+        {
+            int startX = unit.x-1;
+            int startY = unit.y - 1;
+            int endX = unit.x + 1;
+            int endY = unit.y + 1;
+            for (int x = startX; x < endX; x++)
+            {
+                for (int y = startY; y < endY; y++)
+                {
+                    if (x < 0 || x >= LevelMgr.MAX_SIZE)
+                    {
+                        continue;
+                    }
+                    if (y < 0 || y >= LevelMgr.MAX_SIZE)
+                    {
+                        continue;
+                    }
+
+                    LevelMgr.Current.Explode(x, y);
+                                        
+                }
+            }
+        }
+        else if (_bombType == BombType.Up)
+        {
+
+        }
+        else if (_bombType == BombType.Right)
+        { }
+        else if (_bombType == BombType.Down)
+        { }
+        else if (_bombType == BombType.Left)
+        {
+        }
+        
+    }
+
+    bool isDestroying = false;
+    private void OnDestroying()
+    {
+        isDestroying = true;
     }
 
     public const float MERGE_TIME = 0.1f;

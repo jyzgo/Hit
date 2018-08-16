@@ -67,12 +67,14 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 899a3ef90268c564db1faad9167d2a4f, type: 3}
   - {fileID: 21300000, guid: b1f5915ed038c8b458cc5ddfa424d00b, type: 3}
   - {fileID: 21300000, guid: 00f2f4b117837f941b9b628e2c3d4e4c, type: 3}
-  - {fileID: 21300000, guid: b7a684d8bef475742a1eb81c5ff09a53, type: 3}
   - {fileID: 21300000, guid: aa6f49e66c97e744a93e08d48ff5f745, type: 3}
+  - {fileID: 21300000, guid: b7a684d8bef475742a1eb81c5ff09a53, type: 3}
+  - {fileID: 21300000, guid: 6c09cf4415effbf45b215700f0eee611, type: 3}
   - {fileID: 21300000, guid: 9d20a9c08ecac664397db0d0b32160f9, type: 3}
   - {fileID: 21300000, guid: 90cccca960050e94cad3114116079f0a, type: 3}
+  - {fileID: 21300000, guid: 86b962b992683f647b26722a8cfa3953, type: 3}
+  - {fileID: 21300000, guid: e9d1bfd241e33fe40b4ddd4de9b6ea3c, type: 3}
   - {fileID: 21300000, guid: 372ed72d9ca05414f93ac2cb6f642fe2, type: 3}
-  - {fileID: 21300000, guid: 6c09cf4415effbf45b215700f0eee611, type: 3}
   - {fileID: 21300000, guid: 3ae3c49eab59e2c45b1e257fa9f264cb, type: 3}
   - {fileID: 21300000, guid: 2e78ff3810a561b45a1a65dabbdc5bc7, type: 3}
   - {fileID: 21300000, guid: d89881cfd1b8b8b4ebc656cd3ad4d95b, type: 3}
@@ -91,12 +93,14 @@ SpriteAtlas:
   - s1
   - cellCircle
   - num2
+  - fireworkU
   - num1
-  - fireworkV
+  - fireworkR
   - num4
   - num8
+  - fireworkD
+  - fireworkL
   - num256
-  - fireworkH
   - num32
   - num16
   - num2048

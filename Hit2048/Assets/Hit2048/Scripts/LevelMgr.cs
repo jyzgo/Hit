@@ -208,8 +208,10 @@ public class LevelMgr : MonoBehaviour
         Init();
     }
 
-
-
+    internal void Explode(int x, int y)
+    {
+        
+    }
 
 
 
@@ -227,8 +229,8 @@ public class LevelMgr : MonoBehaviour
     }
 
 
-    const int CELL_MAX_INDEX = 10;
-    const int MAX_SIZE = CELL_MAX_INDEX * 2 + 1;
+    public const int CELL_MAX_INDEX = 10;
+    public const int MAX_SIZE = CELL_MAX_INDEX * 2 + 1;
 
     public void SetCells(int x, int y, Cell cell)
     {
@@ -507,8 +509,8 @@ public class LevelMgr : MonoBehaviour
         cell.isAttached = isAttached;
         DataUtil.ShuffleList<int>(numCandidate);
         int ran = numCandidate[0];
+       
         cell.SetPow(ran);
-        //cell.transform.position = new Vector3(0.3f * ran, -1, 0);
         Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 0));
         cell.transform.position = worldPoint + Vector3.up * 0.5f + Vector3.forward * 10f;
         cell_y_pos = cell.transform.position.y;
