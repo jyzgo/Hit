@@ -210,7 +210,12 @@ public class LevelMgr : MonoBehaviour
 
     internal void Explode(int x, int y)
     {
-        
+
+        var unit = grids[x, y];
+        if (unit.cell != null)
+        {
+            unit.cell.DestroyCell();
+        }
     }
 
 
@@ -296,7 +301,7 @@ public class LevelMgr : MonoBehaviour
         {
             var curUnit = candidateUnits[i];
 
-            HashSet<int> numSet = new HashSet<int> { 1, 2, 3, 4, 5 };
+            HashSet<int> numSet = new HashSet<int> {  5 };
             if (curUnit.up != null && curUnit.up.cell != null)
             {
                 numSet.Remove(curUnit.up.cell.pow);
@@ -321,6 +326,10 @@ public class LevelMgr : MonoBehaviour
 
             List<int> numList = numSet.ToList<int>();
             var newGenCell = GenerateCell(numList, true);
+            if (newGenCell == null)
+            {
+                return;
+            }
 
             curUnit.cell = newGenCell;
             newGenCell.unit = curUnit;
@@ -402,12 +411,12 @@ public class LevelMgr : MonoBehaviour
             for (int y = 0; y < MAX_SIZE - 1; y++)
             {
                 var curCell = grids[x, y].cell;
-                if (curCell == null || curCell.isMerging)
+                if (curCell == null || curCell.isMerging || curCell._cellType == CellType.Bomb)
                 {
                     continue;
                 }
                 var nextCell = grids[x, y + 1].cell;
-                if (nextCell == null)
+                if (nextCell == null || nextCell.isMerging || nextCell._cellType == CellType.Bomb)
                 {
                     //y++;
                     continue;
@@ -447,12 +456,12 @@ public class LevelMgr : MonoBehaviour
             for (int x = 0; x < MAX_SIZE - 1; x++)
             {
                 var curCell = grids[x, y].cell;
-                if (curCell == null || curCell.isMerging)
+                if (curCell == null || curCell.isMerging || curCell._cellType == CellType.Bomb)
                 {
                     continue;
                 }
                 var nextCell = grids[x + 1, y].cell;
-                if (nextCell == null)
+                if (nextCell == null || nextCell.isMerging || nextCell._cellType == CellType.Bomb)
                 {
                     //x++;
                     continue;
@@ -504,6 +513,10 @@ public class LevelMgr : MonoBehaviour
     float cell_y_pos = 0f;
     Cell GenerateCell(List<int> numCandidate, bool isAttached = false)
     {
+        if (numCandidate.Count == 0)
+        {
+            return null;
+        }
         var cellGb = Instantiate<GameObject>(CellPrefab);
         var cell = cellGb.GetComponent<Cell>();
         cell.isAttached = isAttached;

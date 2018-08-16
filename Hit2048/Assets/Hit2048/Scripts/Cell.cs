@@ -69,6 +69,7 @@ public class Cell : MonoBehaviour {
         {
             _cellType = CellType.Bomb;
             int index = MTRandom.GetRandomInt(0, 4);
+            index = 0;
             _bombType = (BombType)index;
             Number.sprite = ResMgr.Current.Bombs[index];
             
@@ -150,30 +151,42 @@ public class Cell : MonoBehaviour {
     }
 
     bool isBombTriggering = false;
-    private void BombTrigger()
+    public void BombTrigger()
     {
+        if (isBombTriggering)
+        {
+            return;
+        }
         isBombTriggering = true;
         if (_bombType == BombType.Square)
         {
-            int startX = unit.x-1;
+            int startX = unit.x - 1;
             int startY = unit.y - 1;
             int endX = unit.x + 1;
             int endY = unit.y + 1;
-            for (int x = startX; x < endX; x++)
+            for (int x = startX; x <= endX; x++)
             {
-                for (int y = startY; y < endY; y++)
+
+                if (x < 0 || x >= LevelMgr.MAX_SIZE)
                 {
-                    if (x < 0 || x >= LevelMgr.MAX_SIZE)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
+                for (int y = startY; y <= endY; y++)
+                {
+
                     if (y < 0 || y >= LevelMgr.MAX_SIZE)
                     {
                         continue;
                     }
 
+
+                    if (x == unit.x && y == unit.y)
+                    {
+                        continue;
+                    }
+
                     LevelMgr.Current.Explode(x, y);
-                                        
+
                 }
             }
         }
@@ -188,13 +201,45 @@ public class Cell : MonoBehaviour {
         else if (_bombType == BombType.Left)
         {
         }
-        
+
+        if (unit != null)
+        {
+            unit.cell = null;
+        }
+        unit = null;
+        PlayDestoryAnim();
+
+
     }
 
     bool isDestroying = false;
-    private void OnDestroying()
+    public void DestroyCell()
     {
+        if (isDestroying)
+        {
+            return;
+        }
         isDestroying = true;
+        if (_cellType == CellType.Bomb)
+        {
+            BombTrigger();
+        }
+        else
+        {
+            if (unit != null)
+            {
+                unit.cell = null;
+            }
+            unit = null;
+            PlayDestoryAnim();
+
+        }
+    }
+
+    void PlayDestoryAnim()
+    {
+        this.RunActions(new MTSequence(new MTScaleTo(0.1f, 1.1f), new MTScaleTo(0.08f, 0.1f)), new MTDestroy());
+
     }
 
     public const float MERGE_TIME = 0.1f;
@@ -202,15 +247,15 @@ public class Cell : MonoBehaviour {
     public void MergeTo(Cell anotherCell)
     {
         isMerging = true;
-        this.RunActions(new MTMoveTo(MERGE_TIME, anotherCell.transform.position+ Vector3.back,true), new MTCallFunc(() =>
-        {
-            if (unit != null)
-            {
-                unit.cell = null;
-            }
+        this.RunActions(new MTMoveTo(MERGE_TIME, anotherCell.transform.position + Vector3.back, true), new MTCallFunc(() =>
+          {
+              if (unit != null)
+              {
+                  unit.cell = null;
+              }
 
-            anotherCell.IncreaseNum();
-                }),new MTDestroy());
+              anotherCell.IncreaseNum();
+          }), new MTDestroy());
     }
 
     public int corX = 0;
@@ -218,14 +263,14 @@ public class Cell : MonoBehaviour {
     public void SetLocalCoord()
     {
         corX = (int)(Math.Round(transform.localPosition.x / CELL_SIZE)) + 10;
-        corY =(int)(Math.Round(transform.localPosition.y / CELL_SIZE)) + 10;
+        corY = (int)(Math.Round(transform.localPosition.y / CELL_SIZE)) + 10;
         SetTestText();
         LevelMgr.Current.SetCells(corX, corY, this);
     }
 
     public void SetTestText()
     {
-        TestText.text = corX.ToString() +" "+  corY.ToString();
+        TestText.text = corX.ToString() + " " + corY.ToString();
     }
 
     public void SetPostion(int x, int y)
@@ -249,6 +294,6 @@ public class Cell : MonoBehaviour {
 
     MTFiniteTimeAction GetScale()
     {
-        return new MTSequence(new MTScaleTo(0.1f,0.8f),new MTScaleTo(0.08f,1f));
+        return new MTSequence(new MTScaleTo(0.1f, 0.8f), new MTScaleTo(0.08f, 1f));
     }
 }
