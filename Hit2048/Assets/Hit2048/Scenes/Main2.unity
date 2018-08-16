@@ -575,7 +575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ca595307bdb61d4f92df687acdde217, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SmallSquare: {fileID: 1179216173172432, guid: 71c8515d6d0764e4ca16d0366bbaef55,
+  FireWorkPrefab: {fileID: 1478406882281730, guid: cb9ca634f48a8c04daedd5e500f2b786,
     type: 2}
   cbg:
   - {r: 0.4117647, g: 0.6392157, b: 0.8784314, a: 1}

@@ -12,8 +12,8 @@ public class ResMgr : MonoBehaviour {
     {
         Current = this;
     }
-    public GameObject SmallSquare;
 
+    public GameObject FireWorkPrefab;
     public Color[] cbg;
     public Color[] Colors;
 

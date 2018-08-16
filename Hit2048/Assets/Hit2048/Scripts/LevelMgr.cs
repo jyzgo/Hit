@@ -301,26 +301,26 @@ public class LevelMgr : MonoBehaviour
         {
             var curUnit = candidateUnits[i];
 
-            HashSet<int> numSet = new HashSet<int> {  5 };
-            if (curUnit.up != null && curUnit.up.cell != null)
-            {
-                numSet.Remove(curUnit.up.cell.pow);
+            HashSet<int> numSet = new HashSet<int> {1,2,3 };
+            //if (curUnit.up != null && curUnit.up.cell != null)
+            //{
+            //    numSet.Remove(curUnit.up.cell.pow);
 
-            }
-            if (curUnit.right != null && curUnit.right.cell != null)
-            {
-                numSet.Remove(curUnit.right.cell.pow);
-            }
+            //}
+            //if (curUnit.right != null && curUnit.right.cell != null)
+            //{
+            //    numSet.Remove(curUnit.right.cell.pow);
+            //}
 
-            if (curUnit.down != null && curUnit.down.cell != null)
-            {
-                numSet.Remove(curUnit.down.cell.pow);
-            }
+            //if (curUnit.down != null && curUnit.down.cell != null)
+            //{
+            //    numSet.Remove(curUnit.down.cell.pow);
+            //}
 
-            if (curUnit.left != null && curUnit.left.cell != null)
-            {
-                numSet.Remove(curUnit.left.cell.pow);
-            }
+            //if (curUnit.left != null && curUnit.left.cell != null)
+            //{
+            //    numSet.Remove(curUnit.left.cell.pow);
+            //}
 
             // Debug.Break();
 
@@ -585,7 +585,7 @@ public class LevelMgr : MonoBehaviour
     {
 
         uiMgr.SetStateText("Playing");
-        List<int> numList = new List<int> { 5 };
+        List<int> numList = new List<int> {5 };
         _currentCell = GenerateCell(numList, false);
         GenerateCellsAtEnter();
         yield return new WaitForSeconds(0.3f);

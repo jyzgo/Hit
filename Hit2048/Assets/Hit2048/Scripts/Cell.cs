@@ -69,7 +69,7 @@ public class Cell : MonoBehaviour {
         {
             _cellType = CellType.Bomb;
             int index = MTRandom.GetRandomInt(0, 4);
-            index = 0;
+            
             _bombType = (BombType)index;
             Number.sprite = ResMgr.Current.Bombs[index];
             
@@ -93,9 +93,11 @@ public class Cell : MonoBehaviour {
     {
         if(isCellActive)
         {
+
             transform.Translate(Vector3.up * 0.1f);
         }
-        CellCenterTrans.rotation = Quaternion.identity; 
+  
+        CellCenterTrans.rotation = Quaternion.identity;
     }
     public bool isAttached = false;
 
@@ -108,7 +110,7 @@ public class Cell : MonoBehaviour {
         }
 
         RotateCenter center = collision.GetComponent<RotateCenter>();
-        if(center != null)
+        if (center != null)
         {
             isAttached = true;
             isCellActive = false;
@@ -121,11 +123,11 @@ public class Cell : MonoBehaviour {
         }
 
         Cell anotherCell = collision.GetComponent<Cell>();
-        if(anotherCell !=null)
+        if (anotherCell != null)
         {
             isAttached = true;
             isCellActive = false;
-            if (anotherCell.pow!= this.pow)
+            if (anotherCell.pow != this.pow)
             {
 
 
@@ -158,12 +160,14 @@ public class Cell : MonoBehaviour {
             return;
         }
         isBombTriggering = true;
+        int curX = unit.x;
+        int curY = unit.y;
         if (_bombType == BombType.Square)
         {
-            int startX = unit.x - 1;
-            int startY = unit.y - 1;
-            int endX = unit.x + 1;
-            int endY = unit.y + 1;
+            int startX = curX - 1;
+            int startY = curY - 1;
+            int endX = curX + 1;
+            int endY = curY + 1;
             for (int x = startX; x <= endX; x++)
             {
 
@@ -192,14 +196,27 @@ public class Cell : MonoBehaviour {
         }
         else if (_bombType == BombType.Up)
         {
+            var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
+            fireWork.transform.position = transform.position + Vector3.forward *0.1f;
 
         }
         else if (_bombType == BombType.Right)
-        { }
+        {
+            var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
+            fireWork.transform.position = transform.position + Vector3.forward *0.1f;
+            fireWork.transform.eulerAngles = new Vector3(0, 0, -90f);
+        }
         else if (_bombType == BombType.Down)
-        { }
+        {
+            var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
+            fireWork.transform.position = transform.position + Vector3.forward *0.1f;
+            fireWork.transform.eulerAngles = new Vector3(0, 0, -180f);
+        }
         else if (_bombType == BombType.Left)
         {
+            var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
+            fireWork.transform.position = transform.position + Vector3.forward *0.1f;
+            fireWork.transform.eulerAngles = new Vector3(0, 0, -270f);
         }
 
         if (unit != null)
@@ -211,6 +228,8 @@ public class Cell : MonoBehaviour {
 
 
     }
+
+
 
     bool isDestroying = false;
     public void DestroyCell()
