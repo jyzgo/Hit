@@ -5,6 +5,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using MTUnity.Actions;
 
+public enum BombType
+{
+    
+    Square,
+    Horizon,
+    Vertical,
+    None
+}
+
+public enum CellType
+{
+    Cell,
+    Bomb
+}
+
 public class Cell : MonoBehaviour {
 
     public SpriteRenderer CellBg;
@@ -12,6 +27,9 @@ public class Cell : MonoBehaviour {
     public Transform CellCenterTrans;
     public SpriteRenderer Number;
     public Text TestText;
+
+    public CellType _cellType = CellType.Cell;
+    public BombType _bombType = BombType.None;
 
     RotateCenter _center;
     private void Start()
@@ -30,7 +48,7 @@ public class Cell : MonoBehaviour {
     }
 
     public Unit unit = null;
-
+    const int BOMBINDEX = 6;
     int number = 2;
     public int pow = 0;
     public void SetPow(int n)
@@ -39,12 +57,21 @@ public class Cell : MonoBehaviour {
         pow = n;
         var bgColor = ResMgr.Current.cbg[n - 1];
         var cellColor = ResMgr.Current.Colors[n - 1];
-        SetBgColor(bgColor);
         SetCenterColor(cellColor);
+        SetBgColor(bgColor);
+        if (pow < BOMBINDEX)
+        {
+            number = (int)System.Math.Pow(2, n);
+            Number.sprite = ResMgr.Current.Numbers[n - 1];
+        }
+        else
+        {
+            _cellType = CellType.Bomb;
+            int index = MTRandom.GetRandomInt(0, 2);
+            Number.sprite = ResMgr.Current.Bombs[index];
+            
 
-
-        number = (int)System.Math.Pow(2,n);
-        Number.sprite = ResMgr.Current.Numbers[n - 1];
+        }
    
     }
 

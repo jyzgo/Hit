@@ -59,6 +59,7 @@ public class ResMgr : MonoBehaviour {
     }
 
     public Sprite[] Numbers;
+    public Sprite[] Bombs;
 
 
 

@@ -55,7 +55,9 @@ SpriteAtlas:
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 5bfafcc37873ca94ca769a727a2f2da3, type: 3}
+  - {fileID: 21300000, guid: b69ed12ed19be7948a0fcd9f87290e54, type: 3}
   - {fileID: 21300000, guid: 4d0f77cf27736784ba7f51fbe6fdd9c5, type: 3}
+  - {fileID: 21300000, guid: dcc3b9d2b6367084b8a15959d996b0c6, type: 3}
   - {fileID: 21300000, guid: 4bdbcb0776b82c24eb58f5c8e4807ba9, type: 3}
   - {fileID: 21300000, guid: 703331de2aab4a645aeb92e3e909a246, type: 3}
   - {fileID: 21300000, guid: 8b4b56c8a4a53ea4d91ff4905ca018b4, type: 3}
@@ -66,16 +68,20 @@ SpriteAtlas:
   - {fileID: 21300000, guid: b1f5915ed038c8b458cc5ddfa424d00b, type: 3}
   - {fileID: 21300000, guid: 00f2f4b117837f941b9b628e2c3d4e4c, type: 3}
   - {fileID: 21300000, guid: b7a684d8bef475742a1eb81c5ff09a53, type: 3}
+  - {fileID: 21300000, guid: aa6f49e66c97e744a93e08d48ff5f745, type: 3}
   - {fileID: 21300000, guid: 9d20a9c08ecac664397db0d0b32160f9, type: 3}
   - {fileID: 21300000, guid: 90cccca960050e94cad3114116079f0a, type: 3}
   - {fileID: 21300000, guid: 372ed72d9ca05414f93ac2cb6f642fe2, type: 3}
+  - {fileID: 21300000, guid: 6c09cf4415effbf45b215700f0eee611, type: 3}
   - {fileID: 21300000, guid: 3ae3c49eab59e2c45b1e257fa9f264cb, type: 3}
   - {fileID: 21300000, guid: 2e78ff3810a561b45a1a65dabbdc5bc7, type: 3}
   - {fileID: 21300000, guid: d89881cfd1b8b8b4ebc656cd3ad4d95b, type: 3}
   - {fileID: 21300000, guid: 96f59ab41d15a3a4c882ff41c17cb122, type: 3}
   m_PackedSpriteNamesToIndex:
   - num512
+  - square
   - num128
+  - coin
   - cellBg
   - num64
   - s2
@@ -86,9 +92,11 @@ SpriteAtlas:
   - cellCircle
   - num2
   - num1
+  - fireworkV
   - num4
   - num8
   - num256
+  - fireworkH
   - num32
   - num16
   - num2048

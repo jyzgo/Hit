@@ -570,7 +570,7 @@ public class LevelMgr : MonoBehaviour
     {
 
         uiMgr.SetStateText("Playing");
-        List<int> numList = new List<int> { 1, 2, 3 };
+        List<int> numList = new List<int> { 5 };
         _currentCell = GenerateCell(numList, false);
         GenerateCellsAtEnter();
         yield return new WaitForSeconds(0.3f);
