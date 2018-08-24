@@ -16,9 +16,10 @@ public class Coin : MonoBehaviour {
         Cell cell = collision.GetComponent<Cell>();
         if (cell != null)
         {
-
-           Destroy(gameObject);
-            
+            if (!cell.isAttached)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

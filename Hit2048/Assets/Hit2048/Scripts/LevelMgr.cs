@@ -776,6 +776,7 @@ public class LevelMgr : MonoBehaviour
 
     internal void ChangeToRotating()
     {
+        Debug.Log("change to ro");
         _fsm.ChangeState(PlayState.Rotating);
     }
     #endregion
