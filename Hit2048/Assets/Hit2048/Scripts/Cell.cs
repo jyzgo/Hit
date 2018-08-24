@@ -229,6 +229,13 @@ public class Cell : MonoBehaviour {
 
     }
 
+    public void DestoryAndGenCoin()
+    {
+        var coin = Instantiate<GameObject>(ResMgr.Current.CoinPrefab);
+        coin.transform.parent = _center.transform;
+        coin.transform.position = transform.position;
+        DestroyCell();
+    }
 
 
     bool isDestroying = false;

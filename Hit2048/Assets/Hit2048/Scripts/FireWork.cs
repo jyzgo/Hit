@@ -22,7 +22,7 @@ public class FireWork : MonoBehaviour {
         Cell cell = collision.GetComponent<Cell>();
         if (cell != null)
         {
-            cell.DestroyCell();
+            cell.DestoryAndGenCoin();
         }
     }
 

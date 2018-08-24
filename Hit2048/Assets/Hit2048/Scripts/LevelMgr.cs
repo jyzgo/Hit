@@ -35,6 +35,10 @@ public class Unit
     public Cell cell = null;
     public bool isCenter = false;
 
+    public bool isLinked = false;
+
+    public bool isCheckLinKed = false;
+
 
     private void SetCell(Cell c)
     {
@@ -126,6 +130,41 @@ public class Unit
             }
         }
     }
+
+    int CenterX = 10;
+    int CenterY = 10;
+    internal void CheckLink()
+    {
+        isCheckLinKed = true;
+        if (cell == null)
+        {
+            isLinked = false;
+        }
+        else
+        {
+            isLinked = true;
+            if (!up.isCheckLinKed)
+            {
+                up.CheckLink();
+            }
+
+            if (!down.isCheckLinKed)
+            {
+                down.CheckLink();
+            }
+
+            if (!right.isCheckLinKed)
+            {
+                right.CheckLink();
+            }
+
+            if (!left.isCheckLinKed)
+            {
+                left.CheckLink();
+            }
+        }
+        
+    }
 }
 
 
@@ -214,7 +253,7 @@ public class LevelMgr : MonoBehaviour
         var unit = grids[x, y];
         if (unit.cell != null)
         {
-            unit.cell.DestroyCell();
+            unit.cell.DestoryAndGenCoin();
         }
     }
 
@@ -341,6 +380,63 @@ public class LevelMgr : MonoBehaviour
 
     }
 
+    void CheckLinked()
+    {
+        for (int x = 0; x < MAX_SIZE; x++)
+        {
+            for (int y = 0; y < MAX_SIZE; y++)
+            {
+                grids[x, y].isLinked = false;
+                grids[x, y].isCheckLinKed = false;
+            }
+        }
+
+
+        //move up
+        var upUnit = grids[10, 11];
+        if (upUnit != null)
+        {
+            upUnit.isLinked = true;
+            upUnit.CheckLink();
+        }
+
+        //move down
+        var downUnit = grids[10, 9];
+        if (downUnit.cell != null)
+        {
+            downUnit.isLinked = true;
+            downUnit.CheckLink();
+        }
+
+        //move left
+        var leftUnit = grids[9, 10];
+        if (leftUnit.cell != null)
+        {
+            leftUnit.isLinked = true;
+            leftUnit.CheckLink();
+        }
+        //move right
+        var rightUnit = grids[11, 10];
+        if (rightUnit.cell != null)
+        {
+            rightUnit.isLinked = true;
+            rightUnit.CheckLink();
+        }
+
+        for (int x = 0; x < MAX_SIZE; x++)
+        {
+            for (int y = 0; y < MAX_SIZE; y++)
+            {
+                var unit = grids[x, y];
+                if (!unit.isLinked)
+                {
+                    Explode(x, y);
+                }
+            }
+        }
+
+
+    }
 
 
 
@@ -361,7 +457,7 @@ public class LevelMgr : MonoBehaviour
             {
                 u.up.MoveDown();
             }
-            
+
         }
         else
         {
@@ -396,7 +492,7 @@ public class LevelMgr : MonoBehaviour
 
     public void DelayCheckMerge()
     {
-        StartCoroutine(DelayCheckCells()); 
+        StartCoroutine(DelayCheckCells());
     }
 
     public void CheckCellsMerge()
@@ -430,7 +526,7 @@ public class LevelMgr : MonoBehaviour
                         var curUnit = curCell.unit;
                         curCell.MergeTo(nextCell);
                         curCell.unit = null;
-                        CheckCorY(curUnit);             
+                        CheckCorY(curUnit);
                     }
                     else
                     {
@@ -499,6 +595,7 @@ public class LevelMgr : MonoBehaviour
         }
         else
         {
+            CheckLinked();
             _fsm.ChangeState(PlayState.Rotating);
         }
 
@@ -522,7 +619,7 @@ public class LevelMgr : MonoBehaviour
         cell.isAttached = isAttached;
         DataUtil.ShuffleList<int>(numCandidate);
         int ran = numCandidate[0];
-       
+
         cell.SetPow(ran);
         Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 0));
         cell.transform.position = worldPoint + Vector3.up * 0.5f + Vector3.forward * 10f;
@@ -585,7 +682,7 @@ public class LevelMgr : MonoBehaviour
     {
 
         uiMgr.SetStateText("Playing");
-        List<int> numList = new List<int> {5 };
+        List<int> numList = new List<int> { 5 };
         _currentCell = GenerateCell(numList, false);
         GenerateCellsAtEnter();
         yield return new WaitForSeconds(0.3f);
@@ -673,8 +770,13 @@ public class LevelMgr : MonoBehaviour
     {
 
         yield return new WaitForSeconds(0.1f);
-       // CheckCellsMerge();
+        // CheckCellsMerge();
 
+    }
+
+    internal void ChangeToRotating()
+    {
+        _fsm.ChangeState(PlayState.Rotating);
     }
     #endregion
 
