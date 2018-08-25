@@ -530,7 +530,8 @@ PlayerSettings:
   webGLUseEmbeddedResources: 0
   webGLCompressionFormat: 1
   webGLLinkerTarget: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    1: dUI_DoozyUI
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}
