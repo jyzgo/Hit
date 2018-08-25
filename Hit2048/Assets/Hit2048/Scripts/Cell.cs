@@ -68,7 +68,7 @@ public class Cell : MonoBehaviour {
         else
         {
             _cellType = CellType.Bomb;
-            int index = MTRandom.GetRandomInt(0, 4);
+            int index = 0;// MTRandom.GetRandomInt(0, 4);
             
             _bombType = (BombType)index;
             Number.sprite = ResMgr.Current.Bombs[index];

@@ -323,7 +323,7 @@ public class LevelMgr : MonoBehaviour
 
     }
 
-    public void GenerateCellsAtEnter(int n = 10)
+    public void GenerateCellsAtEnter(int n = 1)
     {
        HashSet<Unit> candidateUnitSet = new HashSet<Unit>();
         for (int x = 0; x < MAX_SIZE; x++)
@@ -756,7 +756,7 @@ public class LevelMgr : MonoBehaviour
     {
 
         uiMgr.SetStateText("Playing");
-        List<int> numList = new List<int> { 1, 2, 3 };
+        List<int> numList = new List<int> { 5 };
         _currentCell = GenerateCell(numList, false);
         GenerateCellsAtEnter();
         yield return new WaitForSeconds(0.3f);
