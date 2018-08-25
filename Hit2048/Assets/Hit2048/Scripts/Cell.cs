@@ -94,7 +94,7 @@ public class Cell : MonoBehaviour {
         if(isCellActive)
         {
 
-            transform.Translate(Vector3.up * 0.1f);
+            transform.Translate(Vector3.up * 0.15f);
         }
   
         CellCenterTrans.rotation = Quaternion.identity;
