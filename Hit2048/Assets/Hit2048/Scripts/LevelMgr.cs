@@ -143,27 +143,38 @@ public class Unit
         else
         {
             isLinked = true;
-            if (!up.isCheckLinKed)
+            if (up != null && !up.isCheckLinKed)
             {
                 up.CheckLink();
             }
 
-            if (!down.isCheckLinKed)
+            if (down != null &&!down.isCheckLinKed)
             {
                 down.CheckLink();
             }
 
-            if (!right.isCheckLinKed)
+            if (right!=null && !right.isCheckLinKed)
             {
                 right.CheckLink();
             }
 
-            if (!left.isCheckLinKed)
+            if (left != null && !left.isCheckLinKed)
             {
                 left.CheckLink();
             }
         }
         
+    }
+
+    internal void Clean()
+    {
+        if (cell != null)
+        {
+            GameObject.Destroy(cell.gameObject);
+            cell = null;
+        }
+        isLinked = false;
+        isCheckLinKed = false;
     }
 }
 
@@ -183,13 +194,13 @@ public class LevelMgr : MonoBehaviour
     public RotateCenter RotateCircle { get; private set; }
     public void Init()
     {
+        InitGrid();
         //Physics.gravity = new Vector3(0, -30.0F, 0);
         uiMgr = FindObjectOfType<UIMgr>();
         RotateCircle = GameObject.FindObjectOfType<RotateCenter>();
         _fsm = StateMachine<PlayState>.Initialize(this, PlayState.Ready);
         _indicator = GetComponentInChildren<Indicator>();
         _indicator.gameObject.SetActive(false);
-        InitGrid();
 
 
     }
@@ -257,7 +268,29 @@ public class LevelMgr : MonoBehaviour
         }
     }
 
+    HashSet<Coin> _coinSet = new HashSet<Coin>();
+    public void AddCoin(Coin c)
+    {
+        _coinSet.Add(c);
+        
+    }
 
+    public void RemoveCoin(Coin c)
+    {
+        _coinSet.Remove(c);
+    }
+
+    public void RemoveAllCoin()
+    {
+        foreach (var c in _coinSet)
+        {
+            if (!c.isDestroying)
+            {
+                c.DestorySelf();
+            }
+        }
+        _coinSet.Clear();
+    }
 
     #region Ready
     void Ready_Enter()
@@ -278,7 +311,7 @@ public class LevelMgr : MonoBehaviour
 
     public void SetCells(int x, int y, Cell cell)
     {
-       // Debug.Log("set cells x" + x + "y" + y);
+        Debug.Log("set cells x" + x + "y" + y);
        // Debug.Assert(grids[x, y].cell == null);
         if (grids[x, y] == null)
         {
@@ -290,7 +323,7 @@ public class LevelMgr : MonoBehaviour
 
     }
 
-    public void GenerateCellsAtEnter(int n = 5)
+    public void GenerateCellsAtEnter(int n = 10)
     {
        HashSet<Unit> candidateUnitSet = new HashSet<Unit>();
         for (int x = 0; x < MAX_SIZE; x++)
@@ -341,25 +374,25 @@ public class LevelMgr : MonoBehaviour
             var curUnit = candidateUnits[i];
 
             HashSet<int> numSet = new HashSet<int> {1,2,3 };
-            //if (curUnit.up != null && curUnit.up.cell != null)
-            //{
-            //    numSet.Remove(curUnit.up.cell.pow);
+            if (curUnit.up != null && curUnit.up.cell != null)
+            {
+                numSet.Remove(curUnit.up.cell.pow);
 
-            //}
-            //if (curUnit.right != null && curUnit.right.cell != null)
-            //{
-            //    numSet.Remove(curUnit.right.cell.pow);
-            //}
+            }
+            if (curUnit.right != null && curUnit.right.cell != null)
+            {
+                numSet.Remove(curUnit.right.cell.pow);
+            }
 
-            //if (curUnit.down != null && curUnit.down.cell != null)
-            //{
-            //    numSet.Remove(curUnit.down.cell.pow);
-            //}
+            if (curUnit.down != null && curUnit.down.cell != null)
+            {
+                numSet.Remove(curUnit.down.cell.pow);
+            }
 
-            //if (curUnit.left != null && curUnit.left.cell != null)
-            //{
-            //    numSet.Remove(curUnit.left.cell.pow);
-            //}
+            if (curUnit.left != null && curUnit.left.cell != null)
+            {
+                numSet.Remove(curUnit.left.cell.pow);
+            }
 
             // Debug.Break();
 
@@ -595,8 +628,15 @@ public class LevelMgr : MonoBehaviour
         }
         else
         {
-            CheckLinked();
-            _fsm.ChangeState(PlayState.Rotating);
+            if (CheckIfLose())
+            {
+                _fsm.ChangeState(PlayState.Lose);
+            }
+            else
+            {
+                CheckLinked();
+                _fsm.ChangeState(PlayState.Rotating);
+            }
         }
 
     }
@@ -649,9 +689,32 @@ public class LevelMgr : MonoBehaviour
         _currentAngle = 0f;
         RotateCircle.transform.rotation = Quaternion.identity;
 
+        for (int x = 0; x < MAX_SIZE; x++)
+        {
+            for (int y = 0; y < MAX_SIZE; y++)
+            {
+                grids[x, y].Clean();
+            }
+        }
+
+        RemoveAllCoin();
+
         //_player.transform.position = new Vector3(0, 1, 0);
     }
 
+   
+
+
+    const float SPEED = 0.05f;
+    const int FractureCount = 2;
+
+    #region Prefabs
+
+    public GameObject CellPrefab;
+
+    #endregion
+
+    #region Lose
     internal void ToLose()
     {
         _fsm.ChangeState(PlayState.Lose);
@@ -664,16 +727,27 @@ public class LevelMgr : MonoBehaviour
         _fsm.ChangeState(PlayState.Ready);
     }
 
+    bool CheckIfLose()
+    {
+        for (int x = 0; x < MAX_SIZE; x++)
+        {
+            for (int y = 0; y < MAX_SIZE; y++)
+            {
+                if (x == 0 || x == MAX_SIZE - 1 || y == 0 || y == MAX_SIZE - 1)
+                {
+                    if (grids[x, y].cell != null)
+                    {
+                        _fsm.ChangeState(PlayState.Lose);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
-    const float SPEED = 0.05f;
-    const int FractureCount = 2;
-
-    #region Prefabs
-
-    public GameObject CellPrefab;
 
     #endregion
-
 
     #region Playing
     Cell _currentCell = null;
@@ -682,7 +756,7 @@ public class LevelMgr : MonoBehaviour
     {
 
         uiMgr.SetStateText("Playing");
-        List<int> numList = new List<int> { 5 };
+        List<int> numList = new List<int> { 1, 2, 3 };
         _currentCell = GenerateCell(numList, false);
         GenerateCellsAtEnter();
         yield return new WaitForSeconds(0.3f);
