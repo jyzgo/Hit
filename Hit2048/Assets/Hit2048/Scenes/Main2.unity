@@ -578,6 +578,8 @@ MonoBehaviour:
   FireWorkPrefab: {fileID: 1478406882281730, guid: cb9ca634f48a8c04daedd5e500f2b786,
     type: 2}
   CoinPrefab: {fileID: 1064337080099536, guid: 5a7dba75e8a30db4b8826c9c5fe8cdd5, type: 2}
+  SquareExplosionPrefab: {fileID: 1091771626505842, guid: ba915c6c99924bb4da90afda43f47d2e,
+    type: 2}
   cbg:
   - {r: 0.4117647, g: 0.6392157, b: 0.8784314, a: 1}
   - {r: 0.36862746, g: 0.70980394, b: 0.8, a: 1}

@@ -164,6 +164,8 @@ public class Cell : MonoBehaviour {
         int curY = unit.y;
         if (_bombType == BombType.Square)
         {
+            var explosion = Instantiate<GameObject>(ResMgr.Current.SquareExplosionPrefab);
+            explosion.transform.position = this.transform.position;
             int startX = curX - 1;
             int startY = curY - 1;
             int endX = curX + 1;

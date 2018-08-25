@@ -15,6 +15,7 @@ public class ResMgr : MonoBehaviour {
 
     public GameObject FireWorkPrefab;
     public GameObject CoinPrefab;
+    public GameObject SquareExplosionPrefab;
     public Color[] cbg;
     public Color[] Colors;
 
