@@ -233,9 +233,13 @@ public class Cell : MonoBehaviour {
 
     public void DestoryAndGenCoin()
     {
-        var coin = Instantiate<GameObject>(ResMgr.Current.CoinPrefab);
-        coin.transform.parent = _center.transform;
-        coin.transform.position = transform.position;
+        int m = MTRandom.GetRandomInt(0, 2);
+        if (m == 0)
+        {
+            var coin = Instantiate<GameObject>(ResMgr.Current.CoinPrefab);
+            coin.transform.parent = _center.transform;
+            coin.transform.position = transform.position;
+        }
         DestroyCell();
     }
 

@@ -828,9 +828,10 @@ public class LevelMgr : MonoBehaviour
     float _currentAngle = 0f;
     IEnumerator Rotating_Enter()
     {
+        uiMgr.SetStateText("Rotate Before");
         yield return new WaitForSeconds(ROTATE_INTERVAL);
 
-
+        uiMgr.SetStateText("Rotate After");
         _currentAngle -= 90f;
         RotateCircle.RunActions(new MTRotateTo(ROTATE_INTERVAL, new Vector3(0, 0, _currentAngle)));
         yield return new WaitForSeconds(ROTATE_INTERVAL);
@@ -842,8 +843,9 @@ public class LevelMgr : MonoBehaviour
     #region Shooting
     IEnumerator Shooting_Enter()
     {
-
+        uiMgr.SetStateText("Shooting Bef");
         yield return new WaitForSeconds(0.1f);
+        uiMgr.SetStateText("Shotting Aft");
         // CheckCellsMerge();
 
     }
