@@ -68,7 +68,7 @@ public class Cell : MonoBehaviour {
         else
         {
             _cellType = CellType.Bomb;
-            int index = 0;// MTRandom.GetRandomInt(0, 4);
+            int index =  MTRandom.GetRandomInt(0, 4);
             
             _bombType = (BombType)index;
             Number.sprite = ResMgr.Current.Bombs[index];
@@ -199,25 +199,25 @@ public class Cell : MonoBehaviour {
         else if (_bombType == BombType.Up)
         {
             var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
-            fireWork.transform.position = transform.position + Vector3.forward *0.1f;
+            fireWork.transform.position = transform.position - Vector3.forward *0.1f;
 
         }
         else if (_bombType == BombType.Right)
         {
             var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
-            fireWork.transform.position = transform.position + Vector3.forward *0.1f;
+            fireWork.transform.position = transform.position - Vector3.forward *0.1f;
             fireWork.transform.eulerAngles = new Vector3(0, 0, -90f);
         }
         else if (_bombType == BombType.Down)
         {
             var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
-            fireWork.transform.position = transform.position + Vector3.forward *0.1f;
+            fireWork.transform.position = transform.position - Vector3.forward *0.1f;
             fireWork.transform.eulerAngles = new Vector3(0, 0, -180f);
         }
         else if (_bombType == BombType.Left)
         {
             var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
-            fireWork.transform.position = transform.position + Vector3.forward *0.1f;
+            fireWork.transform.position = transform.position - Vector3.forward *0.1f;
             fireWork.transform.eulerAngles = new Vector3(0, 0, -270f);
         }
 
