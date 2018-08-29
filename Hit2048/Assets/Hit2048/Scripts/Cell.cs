@@ -119,6 +119,7 @@ public class Cell : MonoBehaviour {
             this.RunAction(GetScale());
             SetLocalCoord();
             LevelMgr.Current.DelayCheckMerge();
+            SoundMgr.Current.PlayImpactSound();
             return;
         }
 
@@ -136,6 +137,7 @@ public class Cell : MonoBehaviour {
                 this.RunAction(GetScale());
 
                 SetLocalCoord();
+                SoundMgr.Current.PlayImpactSound();
                 if (anotherCell._cellType == CellType.Bomb)
                 {
                     anotherCell.BombTrigger();
@@ -278,6 +280,7 @@ public class Cell : MonoBehaviour {
     public bool isMerging = false;
     public void MergeTo(Cell anotherCell)
     {
+        SoundMgr.Current.PlayMergeSound();
         isMerging = true;
         this.RunActions(new MTMoveTo(MERGE_TIME, anotherCell.transform.position + Vector3.back, true), new MTCallFunc(() =>
           {
