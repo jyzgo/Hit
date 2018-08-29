@@ -21,6 +21,7 @@ public class Coin : MonoBehaviour {
         {
             if (!cell.isAttached)
             {
+                SoundMgr.Current.PlayCoinTaken();
                 Destroy(gameObject);
             }
         }

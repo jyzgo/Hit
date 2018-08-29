@@ -1008,9 +1008,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   impactsound: {fileID: 8300000, guid: 6911b64687d13134899120e2a07b29ba, type: 3}
   mergersound: {fileID: 8300000, guid: b92ebb5fd7a73bc4a9dd585760ec3397, type: 3}
-  coinSound: {fileID: 0}
-  rocketSound: {fileID: 0}
-  bombSound: {fileID: 0}
+  coinCameOutSound: {fileID: 8300000, guid: 95eed7d331cdc9247ab1d49359eeca63, type: 3}
+  coinTakenSound: {fileID: 8300000, guid: 653ee5a04dcc9334c88f1dafe541a0de, type: 3}
+  rocketSound: {fileID: 8300000, guid: 8d1e4fb866b1c4141afbd5fb78c37e51, type: 3}
+  bombSound: {fileID: 8300000, guid: 7b6b22fc97d59c840a2e05856e63eeda, type: 3}
 --- !u!82 &1325254168
 AudioSource:
   m_ObjectHideFlags: 0

@@ -6,7 +6,8 @@ public class SoundMgr : MonoBehaviour {
 
     public AudioClip impactsound;
     public AudioClip mergersound;
-    public AudioClip coinSound;
+    public AudioClip coinCameOutSound;
+    public AudioClip coinTakenSound;
     public AudioClip rocketSound;
     public AudioClip bombSound;
 
@@ -32,7 +33,25 @@ public class SoundMgr : MonoBehaviour {
         _sfx.PlayClip(mergersound);
     }
 
+    public void PlayCoinCameOut()
+    {
+        _sfx.PlayClip(coinCameOutSound);
+    }
 
+    public void PlayCoinTaken()
+    {
+        _sfx.PlayClip(coinTakenSound);
+    }
+
+    public void PlayRocketSound()
+    {
+        _sfx.PlayClip(rocketSound);
+    }
+
+    public void PlayBombSound()
+    {
+        _sfx.PlayClip(bombSound);
+    }
 
     // Use this for initialization
     void Start () {

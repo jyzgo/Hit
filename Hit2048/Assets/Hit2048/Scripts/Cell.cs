@@ -166,6 +166,7 @@ public class Cell : MonoBehaviour {
         int curY = unit.y;
         if (_bombType == BombType.Square)
         {
+            SoundMgr.Current.PlayBombSound();
             var explosion = Instantiate<GameObject>(ResMgr.Current.SquareExplosionPrefab);
             explosion.transform.position = this.transform.position;
             int startX = curX - 1;
@@ -200,26 +201,22 @@ public class Cell : MonoBehaviour {
         }
         else if (_bombType == BombType.Up)
         {
-            var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
-            fireWork.transform.position = transform.position - Vector3.forward *0.1f;
+            var fireWork = GenRocket();
 
         }
         else if (_bombType == BombType.Right)
         {
-            var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
-            fireWork.transform.position = transform.position - Vector3.forward *0.1f;
+            var fireWork = GenRocket();
             fireWork.transform.eulerAngles = new Vector3(0, 0, -90f);
         }
         else if (_bombType == BombType.Down)
         {
-            var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
-            fireWork.transform.position = transform.position - Vector3.forward *0.1f;
+            var fireWork = GenRocket();
             fireWork.transform.eulerAngles = new Vector3(0, 0, -180f);
         }
         else if (_bombType == BombType.Left)
         {
-            var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
-            fireWork.transform.position = transform.position - Vector3.forward *0.1f;
+            var fireWork = GenRocket();
             fireWork.transform.eulerAngles = new Vector3(0, 0, -270f);
         }
 
@@ -233,6 +230,17 @@ public class Cell : MonoBehaviour {
 
     }
 
+    GameObject GenRocket()
+    { 
+                    SoundMgr.Current.PlayRocketSound();
+           
+
+            var fireWork = Instantiate<GameObject>(ResMgr.Current.FireWorkPrefab);
+    
+            fireWork.transform.position = transform.position - Vector3.forward *0.1f;
+        return fireWork;
+    }
+
     public void DestoryAndGenCoin()
     {
         int m = MTRandom.GetRandomInt(0, 2);
@@ -241,6 +249,7 @@ public class Cell : MonoBehaviour {
             var coin = Instantiate<GameObject>(ResMgr.Current.CoinPrefab);
             coin.transform.parent = _center.transform;
             coin.transform.position = transform.position;
+            SoundMgr.Current.PlayCoinCameOut();
         }
         DestroyCell();
     }
