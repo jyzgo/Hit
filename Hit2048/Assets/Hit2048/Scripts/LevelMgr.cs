@@ -202,6 +202,9 @@ public class LevelMgr : MonoBehaviour
         _indicator = GetComponentInChildren<Indicator>();
         _indicator.gameObject.SetActive(false);
 
+        AdMgr.RegisterAllAd();
+        AdMgr.ShowAdmobBanner();
+
 
     }
 
@@ -295,7 +298,7 @@ public class LevelMgr : MonoBehaviour
     #region Ready
     void Ready_Enter()
     {
-
+        AdMgr.PreloadAdmobInterstitial();
         uiMgr.SetStateText("Get Ready!");
         Reset();
         // _fsm.ChangeState(PlayState.Playing);
@@ -722,6 +725,7 @@ public class LevelMgr : MonoBehaviour
 
     IEnumerator Lose_Enter()
     {
+        AdMgr.ShowAdmobInterstitial();
         uiMgr.SetStateText("Lose");
         yield return new WaitForSeconds(2f);
         _fsm.ChangeState(PlayState.Ready);

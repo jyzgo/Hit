@@ -195,7 +195,7 @@ public static class AdMgr  {
     public static void RegisterAllAd()
     {
         InitBanner();
-        //PreloadAdmobInterstitial();
+        PreloadAdmobInterstitial();
 
     }
 
