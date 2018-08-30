@@ -20,6 +20,7 @@ public class SFXPool : Singleton<SFXPool>
        var source=  _audioSouces.GetUnusedOne();
         source.clip = clip;
         source.Play();
+        RetriveSource(source, retriveTime);
     }
 
     public AudioSource GetUnuseSouce()
