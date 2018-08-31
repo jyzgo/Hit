@@ -8,6 +8,9 @@ public class UIMgr : MonoBehaviour {
 
     
     public Text _stateText;
+    public Text _scoreText;
+    public Text _coinText;
+
     private void Awake()
     {
         

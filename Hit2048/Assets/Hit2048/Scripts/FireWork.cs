@@ -20,7 +20,7 @@ public class FireWork : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Cell cell = collision.GetComponent<Cell>();
-        if (cell != null)
+        if (cell != null && cell.isAttached)
         {
             cell.DestoryAndGenCoin();
         }

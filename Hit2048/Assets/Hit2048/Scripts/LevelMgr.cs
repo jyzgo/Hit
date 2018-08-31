@@ -37,6 +37,9 @@ public class Unit
 
     public bool isLinked = false;
 
+
+    
+
     public bool isCheckLinKed = false;
 
 
