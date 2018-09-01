@@ -21,4 +21,10 @@ public class UIMgr : MonoBehaviour {
     {
         _stateText.text = v;
     }
+
+    internal void UpdateUI()
+    {
+        _scoreText = SettingMgr.Instance.Score;
+        _coinText = SettingMgr.Instance.Coin;
+    }
 }

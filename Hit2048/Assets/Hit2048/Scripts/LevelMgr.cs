@@ -193,13 +193,18 @@ public class LevelMgr : MonoBehaviour
     public Unit[,] grids = new Unit[MAX_SIZE, MAX_SIZE];
 
     StateMachine<PlayState> _fsm;
-    UIMgr uiMgr;
+    UIMgr _uiMgr;
     public RotateCenter RotateCircle { get; private set; }
+    SettingMgr _settingMgr;
     public void Init()
     {
         InitGrid();
         //Physics.gravity = new Vector3(0, -30.0F, 0);
-        uiMgr = FindObjectOfType<UIMgr>();
+        _uiMgr = FindObjectOfType<UIMgr>();
+        _settingMgr =  SettingMgr.Instance;
+        _settingMgr.LoadFile();
+        _uiMgr.UpdateUI();
+        
         RotateCircle = GameObject.FindObjectOfType<RotateCenter>();
         _fsm = StateMachine<PlayState>.Initialize(this, PlayState.Ready);
         _indicator = GetComponentInChildren<Indicator>();
@@ -302,7 +307,7 @@ public class LevelMgr : MonoBehaviour
     void Ready_Enter()
     {
         AdMgr.PreloadAdmobInterstitial();
-        uiMgr.SetStateText("Get Ready!");
+        _uiMgr.SetStateText("Get Ready!");
         Reset();
         // _fsm.ChangeState(PlayState.Playing);
     }
@@ -729,7 +734,7 @@ public class LevelMgr : MonoBehaviour
     IEnumerator Lose_Enter()
     {
         AdMgr.ShowAdmobInterstitial();
-        uiMgr.SetStateText("Lose");
+        _uiMgr.SetStateText("Lose");
         yield return new WaitForSeconds(2f);
         _fsm.ChangeState(PlayState.Ready);
     }
@@ -762,7 +767,7 @@ public class LevelMgr : MonoBehaviour
     IEnumerator Playing_Enter()
     {
 
-        uiMgr.SetStateText("Playing");
+        _uiMgr.SetStateText("Playing");
         List<int> numList = new List<int> { 5 };
         _currentCell = GenerateCell(numList, false);
         GenerateCellsAtEnter();
@@ -835,10 +840,10 @@ public class LevelMgr : MonoBehaviour
     float _currentAngle = 0f;
     IEnumerator Rotating_Enter()
     {
-        uiMgr.SetStateText("Rotate Before");
+        _uiMgr.SetStateText("Rotate Before");
         yield return new WaitForSeconds(ROTATE_INTERVAL);
 
-        uiMgr.SetStateText("Rotate After");
+        _uiMgr.SetStateText("Rotate After");
         _currentAngle -= 90f;
         RotateCircle.RunActions(new MTRotateTo(ROTATE_INTERVAL, new Vector3(0, 0, _currentAngle)));
         yield return new WaitForSeconds(ROTATE_INTERVAL);
@@ -850,9 +855,9 @@ public class LevelMgr : MonoBehaviour
     #region Shooting
     IEnumerator Shooting_Enter()
     {
-        uiMgr.SetStateText("Shooting Bef");
+        _uiMgr.SetStateText("Shooting Bef");
         yield return new WaitForSeconds(0.1f);
-        uiMgr.SetStateText("Shotting Aft");
+        _uiMgr.SetStateText("Shotting Aft");
         // CheckCellsMerge();
 
     }
