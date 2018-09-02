@@ -275,6 +275,7 @@ public class LevelMgr : MonoBehaviour
         var unit = grids[x, y];
         if (unit.cell != null)
         {
+            AddScore(unit.cell);
             unit.cell.DestoryAndGenCoin();
         }
     }
@@ -308,6 +309,8 @@ public class LevelMgr : MonoBehaviour
     {
         AdMgr.PreloadAdmobInterstitial();
         _uiMgr.SetStateText("Get Ready!");
+        _settingMgr.Score = 0;
+        _uiMgr.UpdateUI();
         Reset();
         // _fsm.ChangeState(PlayState.Playing);
     }
@@ -422,6 +425,21 @@ public class LevelMgr : MonoBehaviour
         }
 
 
+    }
+
+    public void AddScore(Cell cell)
+    {
+        _settingMgr.Score += cell.number;
+        PopupFloatText(cell.transform.position, cell.number.ToString());
+        _uiMgr.UpdateUI();
+
+    }
+
+    public void PopupFloatText(Vector3 pos, string str)
+    {
+        var text = Instantiate<GameObject>(ResMgr.Current.FloatText);
+        var t = text.GetComponent<FloatFont>();
+        t.SetShow(pos, str);
     }
 
     void CheckLinked()

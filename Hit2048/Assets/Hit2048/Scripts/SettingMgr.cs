@@ -32,6 +32,7 @@ public class SettingMgr : Singleton<SettingMgr>{
     }
 
     public int Coin = 0;
+    public int Score = 0;
     public int MaxScore = 0;
 
     void LoadSetting()

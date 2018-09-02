@@ -51,7 +51,7 @@ public class Cell : MonoBehaviour {
 
     public Unit unit = null;
     const int BOMBINDEX = 6;
-    int number = 2;
+    public int number = 2;
     public int pow = 0;
     public void SetPow(int n)
     {

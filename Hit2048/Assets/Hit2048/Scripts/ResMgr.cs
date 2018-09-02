@@ -13,6 +13,7 @@ public class ResMgr : MonoBehaviour {
         Current = this;
     }
 
+    public GameObject FloatText;
     public GameObject FireWorkPrefab;
     public GameObject CoinPrefab;
     public GameObject SquareExplosionPrefab;
