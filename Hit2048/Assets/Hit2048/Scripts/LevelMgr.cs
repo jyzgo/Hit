@@ -791,7 +791,7 @@ public class LevelMgr : MonoBehaviour
     {
 
         _uiMgr.SetStateText("Playing");
-        List<int> numList = new List<int> { 5 };
+        List<int> numList = new List<int> { 1,2,3 };
         _currentCell = GenerateCell(numList, false);
         for (int i = 0; i < _initCellNum; i++)
         {
