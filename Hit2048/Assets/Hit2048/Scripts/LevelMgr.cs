@@ -305,11 +305,13 @@ public class LevelMgr : MonoBehaviour
     }
 
     #region Ready
+    int _initCellNum = 10;
     void Ready_Enter()
     {
         AdMgr.PreloadAdmobInterstitial();
         _uiMgr.SetStateText("Get Ready!");
         _settingMgr.Score = 0;
+        _initCellNum = 10;
         _uiMgr.UpdateUI();
         Reset();
         // _fsm.ChangeState(PlayState.Playing);
@@ -337,9 +339,12 @@ public class LevelMgr : MonoBehaviour
 
     }
 
+
+
     public void GenerateCellsAtEnter(int n = 1)
     {
        HashSet<Unit> candidateUnitSet = new HashSet<Unit>();
+        
         for (int x = 0; x < MAX_SIZE; x++)
         {
             for (int y = 0; y < MAX_SIZE; y++)
@@ -354,25 +359,25 @@ public class LevelMgr : MonoBehaviour
                 {
                     continue;
                 }
-                if (curUnit.up != null && curUnit.up.cell != null)
+                if (curUnit.up != null && (curUnit.up.cell != null || curUnit.up.isCenter))
                 {
                     candidateUnitSet.Add(curUnit);
                     continue;
                 }
 
-                if (curUnit.right != null && curUnit.right.cell != null)
+                if (curUnit.right != null && (curUnit.right.cell != null|| curUnit.right.isCenter))
                 {
                     candidateUnitSet.Add(curUnit);
                     continue;
                 }
 
-                if (curUnit.down != null && curUnit.down.cell != null)
+                if (curUnit.down != null && (curUnit.down.cell != null|| curUnit.down.isCenter))
                 {
                     candidateUnitSet.Add(curUnit);
                     continue;
                 }
 
-                if (curUnit.left != null && curUnit.left.cell != null)
+                if (curUnit.left != null && (curUnit.left.cell != null || curUnit.left.isCenter))
                 {
                     candidateUnitSet.Add(curUnit);
                 }
@@ -788,7 +793,12 @@ public class LevelMgr : MonoBehaviour
         _uiMgr.SetStateText("Playing");
         List<int> numList = new List<int> { 5 };
         _currentCell = GenerateCell(numList, false);
-        GenerateCellsAtEnter();
+        for (int i = 0; i < _initCellNum; i++)
+        {
+            GenerateCellsAtEnter();
+            yield return new WaitForSeconds(0.1f);
+        }
+        _initCellNum = 1;
         yield return new WaitForSeconds(0.3f);
         _isIndicatorActive = false;
         _indicator.gameObject.SetActive(false);
