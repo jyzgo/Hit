@@ -38,7 +38,7 @@ public class Unit
     public bool isLinked = false;
 
 
-    
+
 
     public bool isCheckLinKed = false;
 
@@ -151,12 +151,12 @@ public class Unit
                 up.CheckLink();
             }
 
-            if (down != null &&!down.isCheckLinKed)
+            if (down != null && !down.isCheckLinKed)
             {
                 down.CheckLink();
             }
 
-            if (right!=null && !right.isCheckLinKed)
+            if (right != null && !right.isCheckLinKed)
             {
                 right.CheckLink();
             }
@@ -166,7 +166,7 @@ public class Unit
                 left.CheckLink();
             }
         }
-        
+
     }
 
     internal void Clean()
@@ -201,10 +201,10 @@ public class LevelMgr : MonoBehaviour
         InitGrid();
         //Physics.gravity = new Vector3(0, -30.0F, 0);
         _uiMgr = FindObjectOfType<UIMgr>();
-        _settingMgr =  SettingMgr.Instance;
+        _settingMgr = SettingMgr.Instance;
         _settingMgr.LoadFile();
         _uiMgr.UpdateUI();
-        
+
         RotateCircle = GameObject.FindObjectOfType<RotateCenter>();
         _fsm = StateMachine<PlayState>.Initialize(this, PlayState.Ready);
         _indicator = GetComponentInChildren<Indicator>();
@@ -284,7 +284,7 @@ public class LevelMgr : MonoBehaviour
     public void AddCoin(Coin c)
     {
         _coinSet.Add(c);
-        
+
     }
 
     public void RemoveCoin(Coin c)
@@ -328,7 +328,12 @@ public class LevelMgr : MonoBehaviour
     public void SetCells(int x, int y, Cell cell)
     {
         Debug.Log("set cells x" + x + "y" + y);
-       // Debug.Assert(grids[x, y].cell == null);
+        if (x < 0 || x >= MAX_SIZE || y < 0 || y >= MAX_SIZE)
+        {
+            Destroy(cell.gameObject);
+            return;
+        }
+        // Debug.Assert(grids[x, y].cell == null);
         if (grids[x, y] == null)
         {
             return;
@@ -343,8 +348,8 @@ public class LevelMgr : MonoBehaviour
 
     public void GenerateCellsAtEnter(int n = 1)
     {
-       HashSet<Unit> candidateUnitSet = new HashSet<Unit>();
-        
+        HashSet<Unit> candidateUnitSet = new HashSet<Unit>();
+
         for (int x = 0; x < MAX_SIZE; x++)
         {
             for (int y = 0; y < MAX_SIZE; y++)
@@ -365,13 +370,13 @@ public class LevelMgr : MonoBehaviour
                     continue;
                 }
 
-                if (curUnit.right != null && (curUnit.right.cell != null|| curUnit.right.isCenter))
+                if (curUnit.right != null && (curUnit.right.cell != null || curUnit.right.isCenter))
                 {
                     candidateUnitSet.Add(curUnit);
                     continue;
                 }
 
-                if (curUnit.down != null && (curUnit.down.cell != null|| curUnit.down.isCenter))
+                if (curUnit.down != null && (curUnit.down.cell != null || curUnit.down.isCenter))
                 {
                     candidateUnitSet.Add(curUnit);
                     continue;
@@ -392,7 +397,7 @@ public class LevelMgr : MonoBehaviour
         {
             var curUnit = candidateUnits[i];
 
-            HashSet<int> numSet = new HashSet<int> {1,2,3 };
+            HashSet<int> numSet = new HashSet<int> { 1, 2, 3 };
             if (curUnit.up != null && curUnit.up.cell != null)
             {
                 numSet.Remove(curUnit.up.cell.pow);
@@ -720,6 +725,7 @@ public class LevelMgr : MonoBehaviour
     #endregion Ready
     private void Reset()
     {
+        _round = 0;
         _currentAngle = 0f;
         RotateCircle.transform.rotation = Quaternion.identity;
 
@@ -736,7 +742,7 @@ public class LevelMgr : MonoBehaviour
         //_player.transform.position = new Vector3(0, 1, 0);
     }
 
-   
+
 
 
     const float SPEED = 0.05f;
@@ -749,13 +755,20 @@ public class LevelMgr : MonoBehaviour
     #endregion
 
     #region Lose
+    bool _losing = false;
     internal void ToLose()
     {
+        Debug.Log("Loseee");
+        //Debug.Break();
+        _losing = true;
         _fsm.ChangeState(PlayState.Lose);
     }
 
     IEnumerator Lose_Enter()
     {
+        _losing = false;
+        _isIndicatorActive = false;
+        _indicator.gameObject.SetActive(false);
         AdMgr.ShowAdmobInterstitial();
         _uiMgr.SetStateText("Lose");
         yield return new WaitForSeconds(2f);
@@ -791,13 +804,14 @@ public class LevelMgr : MonoBehaviour
     {
 
         _uiMgr.SetStateText("Playing");
-        List<int> numList = new List<int> { 1,2,3 };
-        _currentCell = GenerateCell(numList, false);
-        for (int i = 0; i < _initCellNum; i++)
+
+        List<int> numList = new List<int> { 1, 2, 3 };
+        for (int i = 0; i < _initCellNum + _round / 1; i++)
         {
             GenerateCellsAtEnter();
             yield return new WaitForSeconds(0.1f);
         }
+        _currentCell = GenerateCell(numList, false);
         _initCellNum = 1;
         yield return new WaitForSeconds(0.3f);
         _isIndicatorActive = false;
@@ -866,16 +880,24 @@ public class LevelMgr : MonoBehaviour
     #region Rotating
     const float ROTATE_INTERVAL = 0.4f;
     float _currentAngle = 0f;
+    int _round = 0;
     IEnumerator Rotating_Enter()
     {
-        _uiMgr.SetStateText("Rotate Before");
-        yield return new WaitForSeconds(ROTATE_INTERVAL);
 
-        _uiMgr.SetStateText("Rotate After");
-        _currentAngle -= 90f;
-        RotateCircle.RunActions(new MTRotateTo(ROTATE_INTERVAL, new Vector3(0, 0, _currentAngle)));
-        yield return new WaitForSeconds(ROTATE_INTERVAL);
-        _fsm.ChangeState(PlayState.Playing);
+            _round++;
+            _uiMgr.SetStateText("Rotate Before");
+            yield return new WaitForSeconds(ROTATE_INTERVAL);
+
+            _uiMgr.SetStateText("Rotate After");
+            _currentAngle -= 90f;
+            RotateCircle.RunActions(new MTRotateTo(ROTATE_INTERVAL, new Vector3(0, 0, _currentAngle)));
+            yield return new WaitForSeconds(ROTATE_INTERVAL);
+
+            if (!_losing)
+            {
+                _fsm.ChangeState(PlayState.Playing);
+            }
+        
 
     }
     #endregion
