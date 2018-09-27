@@ -306,9 +306,15 @@ public class LevelMgr : MonoBehaviour
 
     #region Ready
     int _initCellNum = 10;
+
+    internal void ToReady()
+    {
+        _fsm.ChangeState(PlayState.Ready);
+    }
     void Ready_Enter()
     {
         AdMgr.PreloadAdmobInterstitial();
+        _uiMgr.OnReady();
         _uiMgr.SetStateText("Get Ready!");
         _settingMgr.Score = 0;
         _initCellNum = 10;
@@ -771,9 +777,12 @@ public class LevelMgr : MonoBehaviour
         _indicator.gameObject.SetActive(false);
         AdMgr.ShowAdmobInterstitial();
         _uiMgr.SetStateText("Lose");
+        _uiMgr.ToLose();
         yield return new WaitForSeconds(2f);
-        _fsm.ChangeState(PlayState.Ready);
+
     }
+
+    
 
     bool CheckIfLose()
     {

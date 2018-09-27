@@ -10,6 +10,7 @@ public class UIMgr : MonoBehaviour {
     public Text _stateText;
     public Text _scoreText;
     public Text _coinText;
+    public GameObject _loseUI;
 
     private void Awake()
     {
@@ -28,6 +29,17 @@ public class UIMgr : MonoBehaviour {
         _scoreText.text = SettingMgr.Instance.Score.ToString();
         
     }
+    internal void OnReady()
+    {
+        _loseUI.SetActive(false);
+    }
 
- 
+
+
+    public void ToLose()
+    {
+       
+        LevelMgr.Current.ToReady();
+        _loseUI.SetActive(true);
+    }
 }
