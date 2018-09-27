@@ -25,8 +25,8 @@ public class UIMgr : MonoBehaviour {
 
     internal void UpdateUI()
     {
-        _coinText.text = SettingMgr.Instance.Coin.ToString();
-        _scoreText.text = SettingMgr.Instance.Score.ToString();
+        _coinText.text = SettingMgr.Instance.totalCoin.ToString();
+        _scoreText.text = SettingMgr.Instance.currentScore.ToString();
         
     }
     internal void OnReady()

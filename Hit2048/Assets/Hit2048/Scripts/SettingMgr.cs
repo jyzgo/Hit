@@ -9,16 +9,20 @@ using UnityEngine;
 
 public enum SettingEnum
 {
-Coin,
-MaxScore
+    totalCoin,
+    recordCoin,
+    recordScore,
+    recordBomb,
+    recordRound
 
 }
 
-public class SettingMgr : Singleton<SettingMgr>{
+public class SettingMgr : Singleton<SettingMgr>
+{
 
     public static readonly string SKEY = "b8167365ee0a51e4dcc49";
 
-  
+
     public void LoadFile()
     {
         var filePath = GetPath();
@@ -31,9 +35,20 @@ public class SettingMgr : Singleton<SettingMgr>{
         LoadSetting();
     }
 
-    public int Coin = 0;
-    public int Score = 0;
-    public int MaxScore = 0;
+
+    public int currentCoin = 0;
+    public int recordCoin = 0;
+    public int totalCoin = 0;
+
+    public int currentScore = 0;
+    public int recordScore = 0;
+
+    public int currentBomb = 0;
+    public int recordBomb = 0;
+
+    public int currentRound = 0;
+    public int recordRound = 0;
+
 
     void LoadSetting()
     {
@@ -41,15 +56,27 @@ public class SettingMgr : Singleton<SettingMgr>{
         string content = MTXXTea.DecryptToString(bt, SKEY); //File.ReadAllText(GetPath());
 
         MTJSONObject setJs = MTJSON.Deserialize(content);
-        MaxScore = setJs.GetInt(SettingEnum.MaxScore.ToString(), 0);
-        Coin = setJs.GetInt(SettingEnum.Coin.ToString(), 0);
+        totalCoin= setJs.GetInt(SettingEnum.totalCoin.ToString(), 0);
+        recordCoin = setJs.GetInt(SettingEnum.recordCoin.ToString(), 0);
+
+        recordScore = setJs.GetInt(SettingEnum.recordScore.ToString(), 0);
+        recordBomb = setJs.GetInt(SettingEnum.recordBomb.ToString(), 0);
+        recordRound = setJs.GetInt(SettingEnum.recordRound.ToString(), 0);
+
 
     }
 
     public void SaveToFile()
     {
         MTJSONObject setJs = MTJSONObject.CreateDict();
-        setJs.Set(SettingEnum.Coin.ToString(), Coin);
+        setJs.Set(SettingEnum.totalCoin.ToString(),totalCoin);
+        setJs.Set(SettingEnum.recordCoin.ToString(), recordCoin);
+
+        setJs.Set(SettingEnum.recordScore.ToString(), recordScore);
+
+        setJs.Set(SettingEnum.recordBomb.ToString(), recordBomb);
+        setJs.Set(SettingEnum.recordRound.ToString(), recordRound);
+
 
 
 

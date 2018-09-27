@@ -316,7 +316,7 @@ public class LevelMgr : MonoBehaviour
         AdMgr.PreloadAdmobInterstitial();
         _uiMgr.OnReady();
         _uiMgr.SetStateText("Get Ready!");
-        _settingMgr.Score = 0;
+        _settingMgr.currentScore = 0;
         _initCellNum = 10;
         _uiMgr.UpdateUI();
         Reset();
@@ -445,7 +445,7 @@ public class LevelMgr : MonoBehaviour
 
     public void AddScore(Cell cell)
     {
-        _settingMgr.Score += cell.number;
+        _settingMgr.currentScore += cell.number;
         PopupFloatText(cell.transform.position, cell.number.ToString());
         _uiMgr.UpdateUI();
 

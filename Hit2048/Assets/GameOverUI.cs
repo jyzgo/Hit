@@ -11,24 +11,34 @@ public class GameOverUI : MonoBehaviour {
     public Text CurrentRoundText;
     public Text RecordRoundText;
 
+    public void SetRound(string current, string Record)
+    {
+        CurrentRoundText.text = current;
+        RecordRoundText.text = Record;
+    }
+
     public Text CurrentScoreText;
     public Text RecordScoreText;
 
+    public void SetScore(string current, string record)
+    {
+        CurrentCoinText.text = current;
+        RecordCoinText.text = record;
+    }
+
     public Text CurrentCoinText;
     public Text RecordCoinText;
+    public void SetCoin(string current, string record)
+    {
+        CurrentBomb.text = current;
+        RecordBomb.text = record;
+    }
 
     public Text CurrentBomb;
     public Text RecordBomb;
 
     public GameObject ResetButton;
 
-
-
-	// Use this for initialization
-	void Start () {
-
-		
-	}
 
     private void OnEnable()
     {
