@@ -1537,11 +1537,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 915268546}
-  - component: {fileID: 915268549}
-  - component: {fileID: 915268548}
   - component: {fileID: 915268547}
   m_Layer: 5
-  m_Name: LoseUI
+  m_Name: GameOverUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1577,55 +1575,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 915268545}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: dc80aaf6d0cde2d459e78e630be30422, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!114 &915268548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 915268545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
---- !u!223 &915268549
-Canvas:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 915268545}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
+  GameOverGameObject: {fileID: 1050929437}
+  Form: {fileID: 2122382167}
+  CurrentRoundText: {fileID: 484609741}
+  RecordRoundText: {fileID: 1157318786}
+  CurrentScoreText: {fileID: 212076027}
+  RecordScoreText: {fileID: 153185285}
+  CurrentCoinText: {fileID: 1865378666}
+  RecordCoinText: {fileID: 1945965532}
+  CurrentBomb: {fileID: 250925068}
+  RecordBomb: {fileID: 418702681}
+  ResetButton: {fileID: 1756591737}
 --- !u!1 &915586071
 GameObject:
   m_ObjectHideFlags: 0
@@ -1889,7 +1852,7 @@ GameObject:
   - component: {fileID: 1050929440}
   - component: {fileID: 1050929439}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Gameover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
