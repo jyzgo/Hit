@@ -67,6 +67,7 @@ public class Cell : MonoBehaviour {
         }
         else
         {
+            LevelMgr.Current.OnGenBomb();
             _cellType = CellType.Bomb;
             int index =  MTRandom.GetRandomInt(0, 4);
             

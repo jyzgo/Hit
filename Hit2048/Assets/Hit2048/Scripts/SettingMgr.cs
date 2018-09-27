@@ -1,6 +1,7 @@
 ﻿using MTUnity;
 using MTUnity.Utils;
 using MTXxtea;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -92,4 +93,36 @@ public class SettingMgr : Singleton<SettingMgr>
 
     const string settingFileName = "hitsetting.dt";
 
+    
+    internal void AddCoinCollected()
+    {
+        currentCoin += 1;
+        totalCoin += 1;
+ 
+    }
+    
+    internal void OnGameOverShowed()
+    {
+        if(currentCoin > recordCoin)
+        {
+            recordCoin = currentCoin;
+        }
+
+        if(currentRound > recordRound)
+        {
+            recordRound = currentRound;
+        }
+
+        if(currentBomb > recordBomb)
+        {
+            recordBomb = currentBomb;
+        }
+
+        if(currentScore > recordScore)
+        {
+            recordScore = currentScore;
+        }
+
+        SaveToFile();
+    }
 }

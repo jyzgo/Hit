@@ -316,10 +316,9 @@ public class LevelMgr : MonoBehaviour
         AdMgr.PreloadAdmobInterstitial();
         _uiMgr.OnReady();
         _uiMgr.SetStateText("Get Ready!");
-        _settingMgr.currentScore = 0;
         _initCellNum = 10;
-        _uiMgr.UpdateUI();
         Reset();
+        _uiMgr.UpdateUI();
         // _fsm.ChangeState(PlayState.Playing);
     }
 
@@ -442,6 +441,12 @@ public class LevelMgr : MonoBehaviour
 
 
     }
+    public void OnGenBomb()
+    {
+        _settingMgr.currentBomb += 1;
+    }
+
+    
 
     public void AddScore(Cell cell)
     {
@@ -731,7 +736,11 @@ public class LevelMgr : MonoBehaviour
     #endregion Ready
     private void Reset()
     {
-        _round = 0;
+        _settingMgr.currentScore = 0;
+        _settingMgr.currentBomb = 0;
+        _settingMgr.currentCoin = 0;
+        _settingMgr.currentRound = 0;
+        
         _currentAngle = 0f;
         RotateCircle.transform.rotation = Quaternion.identity;
 
@@ -815,7 +824,7 @@ public class LevelMgr : MonoBehaviour
         _uiMgr.SetStateText("Playing");
 
         List<int> numList = new List<int> { 1, 2, 3 };
-        for (int i = 0; i < _initCellNum + _round / 1; i++)
+        for (int i = 0; i < _initCellNum + _settingMgr.currentRound / 1; i++)
         {
             GenerateCellsAtEnter();
             yield return new WaitForSeconds(0.1f);
@@ -889,11 +898,11 @@ public class LevelMgr : MonoBehaviour
     #region Rotating
     const float ROTATE_INTERVAL = 0.4f;
     float _currentAngle = 0f;
-    int _round = 0;
+
     IEnumerator Rotating_Enter()
     {
 
-            _round++;
+            _settingMgr.currentRound++;
             _uiMgr.SetStateText("Rotate Before");
             yield return new WaitForSeconds(ROTATE_INTERVAL);
 
@@ -925,6 +934,11 @@ public class LevelMgr : MonoBehaviour
     {
         Debug.Log("change to ro");
         _fsm.ChangeState(PlayState.Rotating);
+    }
+
+    internal void OnCoinBeCollected()
+    {
+        _settingMgr.AddCoinCollected();
     }
     #endregion
 

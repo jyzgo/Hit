@@ -39,6 +39,11 @@ public class GameOverUI : MonoBehaviour {
 
     public GameObject ResetButton;
 
+    SettingMgr _settingMgr;
+    private void Awake()
+    {
+        _settingMgr = SettingMgr.Instance;
+    }
 
     private void OnEnable()
     {
@@ -49,6 +54,21 @@ public class GameOverUI : MonoBehaviour {
         GameOverGameObject.RunActions(GetScale(2));
         ResetButton.RunActions(GetScale(2));
         Form.RunActions(new MTScaleTo(0.3f, 1f));
+
+        CurrentScoreText.text = _settingMgr.currentScore.ToString();
+        RecordCoinText.text = _settingMgr.recordCoin.ToString();
+
+        CurrentRoundText.text = _settingMgr.currentRound.ToString();
+        RecordRoundText.text = _settingMgr.recordRound.ToString();
+
+        CurrentCoinText.text = _settingMgr.currentCoin.ToString();
+        RecordCoinText.text = _settingMgr.recordCoin.ToString();
+
+        CurrentBomb.text = _settingMgr.currentBomb.ToString();
+        RecordBomb.text = _settingMgr.recordBomb.ToString();
+
+        _settingMgr.OnGameOverShowed();
+
 
 
     }

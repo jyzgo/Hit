@@ -1544,7 +1544,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &915268546
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2272,9 +2272,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c373fd34ff22fac47862df55c14b8bb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Coin: 0
-  Score: 0
-  MaxScore: 0
+  currentCoin: 0
+  recordCoin: 0
+  totalCoin: 0
+  currentScore: 0
+  recordScore: 0
+  currentBomb: 0
+  recordBomb: 0
+  currentRound: 0
+  recordRound: 0
 --- !u!1 &1264708027
 GameObject:
   m_ObjectHideFlags: 0
