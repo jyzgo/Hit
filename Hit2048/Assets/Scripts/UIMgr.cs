@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MTUnity.Actions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,9 @@ public class UIMgr : MonoBehaviour {
     public Text _scoreText;
     public Text _coinText;
     public GameObject _loseUI;
+
+    public GameObject Press;
+    public GameObject Move;
 
     private void Awake()
     {
@@ -32,6 +36,32 @@ public class UIMgr : MonoBehaviour {
     internal void OnReady()
     {
         _loseUI.SetActive(false);
+        Press.gameObject.SetActive(true);
+        Press.gameObject.RunActions(new MTRepeatForever(new MTScaleTo(0.8f, 2.3f), new MTScaleTo(0.8f, 1.8f)));
+    }
+
+    internal void ShowMoveHint()
+    {
+        Move.gameObject.SetActive(true);
+        Move.gameObject.RunActions(new MTRepeatForever(new MTScaleTo(0.8f, 2.3f), new MTScaleTo(0.8f, 1.8f)));
+    }
+
+    internal void HideMoveHint()
+    {
+        Move.StopAllActions();
+        Move.gameObject.SetActive(false);
+
+    }
+
+    internal void FirstPress()
+    {
+
+    }
+
+    internal void OnReadyExit()
+    {
+        Press.StopAllActions();
+        Press.gameObject.SetActive(false);
     }
 
     public void OnReplay()

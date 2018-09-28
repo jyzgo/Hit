@@ -322,6 +322,11 @@ public class LevelMgr : MonoBehaviour
         // _fsm.ChangeState(PlayState.Playing);
     }
 
+    void Ready_Exit()
+    {
+        _uiMgr.OnReadyExit();
+    }
+
     internal void Hitted(int num)
     {
     }
@@ -831,11 +836,11 @@ public class LevelMgr : MonoBehaviour
 
         _uiMgr.SetStateText("Playing");
 
-        List<int> numList = new List<int> { 5};//{ 1, 2, 3 };
-        for (int i = 0; i < _initCellNum + _settingMgr.currentRound / 4; i++) //20
+        List<int> numList = new List<int> { 1, 2, 3,4 };
+        for (int i = 0; i < _initCellNum + _settingMgr.currentRound / 20; i++) //20
         {
             GenerateCellsAtEnter();
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.02f);
         }
         _currentCell = GenerateCell(numList, false);
         _initCellNum = 1;
@@ -899,6 +904,7 @@ public class LevelMgr : MonoBehaviour
         if (_fsm.State == PlayState.Ready)
         {
             _fsm.ChangeState(PlayState.Playing);
+            _uiMgr.ShowMoveHint();
         }
 
     }
@@ -931,6 +937,7 @@ public class LevelMgr : MonoBehaviour
     #region Shooting
     IEnumerator Shooting_Enter()
     {
+        _uiMgr.HideMoveHint();
         _uiMgr.SetStateText("Shooting Bef");
         yield return new WaitForSeconds(0.1f);
         _uiMgr.SetStateText("Shotting Aft");
