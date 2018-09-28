@@ -3039,7 +3039,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 680275495}
-        m_MethodName: ToLose
+        m_MethodName: OnReplay
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

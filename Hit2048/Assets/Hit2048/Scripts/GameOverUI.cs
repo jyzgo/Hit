@@ -56,7 +56,7 @@ public class GameOverUI : MonoBehaviour {
         Form.RunActions(new MTScaleTo(0.3f, 1f));
 
         CurrentScoreText.text = _settingMgr.currentScore.ToString();
-        RecordCoinText.text = _settingMgr.recordCoin.ToString();
+        RecordScoreText.text = _settingMgr.recordScore.ToString();
 
         CurrentRoundText.text = _settingMgr.currentRound.ToString();
         RecordRoundText.text = _settingMgr.recordRound.ToString();

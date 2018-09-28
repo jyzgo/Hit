@@ -64,6 +64,7 @@ public class Cell : MonoBehaviour {
         {
             number = (int)System.Math.Pow(2, n);
             Number.sprite = ResMgr.Current.Numbers[n];
+            
         }
         else
         {
@@ -131,8 +132,6 @@ public class Cell : MonoBehaviour {
             isCellActive = false;
             if (anotherCell.pow != this.pow)
             {
-
-
                 transform.position = anotherCell.transform.position + Vector3.down * 0.426f;
                 transform.SetParent(_center.transform);
                 this.RunAction(GetScale());
@@ -290,6 +289,7 @@ public class Cell : MonoBehaviour {
     public bool isMerging = false;
     public void MergeTo(Cell anotherCell)
     {
+        LevelMgr.Current.AddScore(anotherCell);
         SoundMgr.Current.PlayMergeSound();
         isMerging = true;
         this.RunActions(new MTMoveTo(MERGE_TIME, anotherCell.transform.position + Vector3.back, true), new MTCallFunc(() =>

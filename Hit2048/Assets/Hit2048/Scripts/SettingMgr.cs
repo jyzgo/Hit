@@ -55,9 +55,10 @@ public class SettingMgr : Singleton<SettingMgr>
     {
         var bt = File.ReadAllBytes(GetPath());
         string content = MTXXTea.DecryptToString(bt, SKEY); //File.ReadAllText(GetPath());
-
+        Debug.Log("get content " + content);
         MTJSONObject setJs = MTJSON.Deserialize(content);
         totalCoin= setJs.GetInt(SettingEnum.totalCoin.ToString(), 0);
+        Debug.Log("get totoal coin " + totalCoin);
         recordCoin = setJs.GetInt(SettingEnum.recordCoin.ToString(), 0);
 
         recordScore = setJs.GetInt(SettingEnum.recordScore.ToString(), 0);
@@ -71,6 +72,7 @@ public class SettingMgr : Singleton<SettingMgr>
     {
         MTJSONObject setJs = MTJSONObject.CreateDict();
         setJs.Set(SettingEnum.totalCoin.ToString(),totalCoin);
+        Debug.Log("save total coin" + totalCoin);
         setJs.Set(SettingEnum.recordCoin.ToString(), recordCoin);
 
         setJs.Set(SettingEnum.recordScore.ToString(), recordScore);
@@ -79,8 +81,8 @@ public class SettingMgr : Singleton<SettingMgr>
         setJs.Set(SettingEnum.recordRound.ToString(), recordRound);
 
 
-
-
+        Debug.Log("record score " + recordScore);
+        Debug.Log("js " + setJs.ToString());
         var bt = MTXXTea.Encrypt(setJs.ToString(), SKEY);
         File.WriteAllBytes(GetPath(), bt);
 
@@ -98,7 +100,7 @@ public class SettingMgr : Singleton<SettingMgr>
     {
         currentCoin += 1;
         totalCoin += 1;
- 
+        SaveToFile();
     }
     
     internal void OnGameOverShowed()

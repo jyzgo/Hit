@@ -332,7 +332,7 @@ public class LevelMgr : MonoBehaviour
 
     public void SetCells(int x, int y, Cell cell)
     {
-        Debug.Log("set cells x" + x + "y" + y);
+        //Debug.Log("set cells x" + x + "y" + y);
         if (x < 0 || x >= MAX_SIZE || y < 0 || y >= MAX_SIZE)
         {
             Destroy(cell.gameObject);
@@ -447,12 +447,16 @@ public class LevelMgr : MonoBehaviour
     }
 
     
+    public void AddScore(Vector3 pos, int score)
+    {
+        _settingMgr.currentScore += score;
+        PopupFloatText(pos, score.ToString());
+        _uiMgr.UpdateUI();
+    }
 
     public void AddScore(Cell cell)
     {
-        _settingMgr.currentScore += cell.number;
-        PopupFloatText(cell.transform.position, cell.number.ToString());
-        _uiMgr.UpdateUI();
+        AddScore(cell.transform.position, cell.number);
 
     }
 
@@ -736,6 +740,11 @@ public class LevelMgr : MonoBehaviour
     #endregion Ready
     private void Reset()
     {
+        if(_currentCell != null)
+        {
+            Destroy(_currentCell.gameObject);
+            _currentCell = null;
+        }
         _settingMgr.currentScore = 0;
         _settingMgr.currentBomb = 0;
         _settingMgr.currentCoin = 0;
@@ -779,7 +788,7 @@ public class LevelMgr : MonoBehaviour
         _fsm.ChangeState(PlayState.Lose);
     }
 
-    IEnumerator Lose_Enter()
+    void Lose_Enter()
     {
         _losing = false;
         _isIndicatorActive = false;
@@ -787,7 +796,6 @@ public class LevelMgr : MonoBehaviour
         AdMgr.ShowAdmobInterstitial();
         _uiMgr.SetStateText("Lose");
         _uiMgr.ToLose();
-        yield return new WaitForSeconds(2f);
 
     }
 
@@ -823,8 +831,8 @@ public class LevelMgr : MonoBehaviour
 
         _uiMgr.SetStateText("Playing");
 
-        List<int> numList = new List<int> { 1, 2, 3 };
-        for (int i = 0; i < _initCellNum + _settingMgr.currentRound / 1; i++)
+        List<int> numList = new List<int> { 5};//{ 1, 2, 3 };
+        for (int i = 0; i < _initCellNum + _settingMgr.currentRound / 4; i++) //20
         {
             GenerateCellsAtEnter();
             yield return new WaitForSeconds(0.1f);
@@ -901,7 +909,7 @@ public class LevelMgr : MonoBehaviour
 
     IEnumerator Rotating_Enter()
     {
-
+        _uiMgr.UpdateUI();
             _settingMgr.currentRound++;
             _uiMgr.SetStateText("Rotate Before");
             yield return new WaitForSeconds(ROTATE_INTERVAL);
@@ -939,6 +947,7 @@ public class LevelMgr : MonoBehaviour
     internal void OnCoinBeCollected()
     {
         _settingMgr.AddCoinCollected();
+        _uiMgr.UpdateUI();
     }
     #endregion
 

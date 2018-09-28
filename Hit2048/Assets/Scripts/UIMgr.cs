@@ -34,12 +34,14 @@ public class UIMgr : MonoBehaviour {
         _loseUI.SetActive(false);
     }
 
-
+    public void OnReplay()
+    {
+        LevelMgr.Current.ToReady();
+    }
 
     public void ToLose()
     {
        
-        LevelMgr.Current.ToReady();
         _loseUI.SetActive(true);
     }
 }
