@@ -23,7 +23,7 @@ using GoogleMobileAds.Common;
 
 namespace GoogleMobileAds.iOS
 {
-    internal class BannerClient : IBannerClient, IDisposable
+    public class BannerClient : IBannerClient, IDisposable
     {
         private IntPtr bannerViewPtr;
 
@@ -96,6 +96,39 @@ namespace GoogleMobileAds.iOS
                     AdViewWillLeaveApplicationCallback);
         }
 
+        public void CreateBannerView(string adUnitId, AdSize adSize, int x, int y)
+        {
+
+            this.bannerClientPtr = (IntPtr)GCHandle.Alloc(this);
+
+            if (adSize.IsSmartBanner)
+            {
+                this.BannerViewPtr = Externs.GADUCreateSmartBannerViewWithCustomPosition(
+                    this.bannerClientPtr,
+                    adUnitId,
+                    x,
+                    y);
+            }
+            else
+            {
+                this.BannerViewPtr = Externs.GADUCreateBannerViewWithCustomPosition(
+                    this.bannerClientPtr,
+                    adUnitId,
+                    adSize.Width,
+                    adSize.Height,
+                    x,
+                    y);
+            }
+
+            Externs.GADUSetBannerCallbacks(
+                this.BannerViewPtr,
+                AdViewDidReceiveAdCallback,
+                AdViewDidFailToReceiveAdWithErrorCallback,
+                AdViewWillPresentScreenCallback,
+                AdViewDidDismissScreenCallback,
+                AdViewWillLeaveApplicationCallback);
+        }
+
         // Loads an ad.
         public void LoadAd(AdRequest request)
         {
@@ -121,6 +154,36 @@ namespace GoogleMobileAds.iOS
         {
             Externs.GADURemoveBannerView(this.BannerViewPtr);
             this.BannerViewPtr = IntPtr.Zero;
+        }
+
+        // Returns the height of the BannerView in pixels.
+        public float GetHeightInPixels()
+        {
+            return Externs.GADUGetBannerViewHeightInPixels(this.BannerViewPtr);
+        }
+
+        // Returns the width of the BannerView in pixels.
+        public float GetWidthInPixels()
+        {
+            return Externs.GADUGetBannerViewWidthInPixels(this.BannerViewPtr);
+        }
+
+        // Set the position of the banner view using standard position.
+        public void SetPosition(AdPosition adPosition)
+        {
+            Externs.GADUSetBannerViewAdPosition(this.BannerViewPtr, (int)adPosition);
+        }
+
+        // Set the position of the banner view using custom position.
+        public void SetPosition(int x, int y)
+        {
+            Externs.GADUSetBannerViewCustomPosition(this.BannerViewPtr, x, y);
+        }
+
+        // Returns the mediation adapter class name.
+        public string MediationAdapterClassName()
+        {
+            return Utils.PtrToString(Externs.GADUMediationAdapterClassNameForBannerView(this.BannerViewPtr));
         }
 
         public void Dispose()
