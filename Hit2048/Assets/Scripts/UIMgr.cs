@@ -66,6 +66,7 @@ public class UIMgr : MonoBehaviour {
 
     public void OnReplay()
     {
+        AdMgr.ShowAdmobInterstitial();
         LevelMgr.Current.ToReady();
     }
 

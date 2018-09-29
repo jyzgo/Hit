@@ -721,7 +721,7 @@ public class LevelMgr : MonoBehaviour
 
         cell.SetPow(ran);
         Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 0));
-        cell.transform.position = worldPoint + Vector3.up * 0.5f + Vector3.forward * 10f;
+        cell.transform.position = worldPoint + Vector3.up * 1.5f + Vector3.forward * 10f;
         cell_y_pos = cell.transform.position.y;
         cell.transform.localScale = Vector3.one * 0.01f;
 
@@ -798,7 +798,6 @@ public class LevelMgr : MonoBehaviour
         _losing = false;
         _isIndicatorActive = false;
         _indicator.gameObject.SetActive(false);
-        AdMgr.ShowAdmobInterstitial();
         _uiMgr.SetStateText("Lose");
         _uiMgr.ToLose();
 
