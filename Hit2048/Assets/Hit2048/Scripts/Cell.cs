@@ -315,6 +315,7 @@ public class Cell : MonoBehaviour {
 
     public void SetTestText()
     {
+        return;
         TestText.text = corX.ToString() + " " + corY.ToString();
     }
 
