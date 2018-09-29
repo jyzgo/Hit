@@ -469,7 +469,7 @@ public class LevelMgr : MonoBehaviour
     {
         var text = Instantiate<GameObject>(ResMgr.Current.FloatText);
         var t = text.GetComponent<FloatFont>();
-        t.SetShow(pos, str);
+        t.SetShow(pos, "+" + str);
     }
 
     void CheckLinked()
