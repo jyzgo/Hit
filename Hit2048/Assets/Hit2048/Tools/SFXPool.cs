@@ -15,9 +15,10 @@ public class SFXPool : Singleton<SFXPool>
         _audioSouces.Retrive(s);
     }
 
-    public void PlayClip(AudioClip clip, float retriveTime = 1f)
+    public void PlayClip(AudioClip clip, float retriveTime = 1f,float pitch =1f)
     {
        var source=  _audioSouces.GetUnusedOne();
+        source.pitch = pitch;
         source.clip = clip;
         source.Play();
         RetriveSource(source, retriveTime);

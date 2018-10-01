@@ -189,6 +189,9 @@ public class LevelMgr : MonoBehaviour
 
 
     public static LevelMgr Current;
+    public GameObject Good;
+    public GameObject Wonderful;
+    public GameObject Great;
 
     public Unit[,] grids = new Unit[MAX_SIZE, MAX_SIZE];
 
@@ -745,6 +748,8 @@ public class LevelMgr : MonoBehaviour
     #endregion Ready
     private void Reset()
     {
+        _losing = false;
+        _settingMgr.currentMatch = 0;
         if(_currentCell != null)
         {
             Destroy(_currentCell.gameObject);
@@ -787,7 +792,7 @@ public class LevelMgr : MonoBehaviour
     bool _losing = false;
     internal void ToLose()
     {
-        Debug.Log("Loseee");
+
         //Debug.Break();
         _losing = true;
         _fsm.ChangeState(PlayState.Lose);
@@ -799,6 +804,12 @@ public class LevelMgr : MonoBehaviour
         _isIndicatorActive = false;
         _indicator.gameObject.SetActive(false);
         _uiMgr.SetStateText("Lose");
+
+        if(_currentCell != null)
+        {
+            Destroy(_currentCell.gameObject);
+            _currentCell = null;
+        }
         _uiMgr.ToLose();
 
     }
@@ -836,7 +847,7 @@ public class LevelMgr : MonoBehaviour
         _uiMgr.SetStateText("Playing");
 
         List<int> numList = new List<int> { 1, 2, 3,4 };
-        for (int i = 0; i < _initCellNum + _settingMgr.currentRound / 20; i++) //20
+        for (int i = 0; i < _initCellNum + _settingMgr.currentRound / 20f; i++) //20
         {
             GenerateCellsAtEnter();
             yield return new WaitForSeconds(0.02f);
@@ -911,9 +922,26 @@ public class LevelMgr : MonoBehaviour
     #region Rotating
     const float ROTATE_INTERVAL = 0.4f;
     float _currentAngle = 0f;
+    public int _mergeTime = 0;
+    public void AddMatchTime()
+    {
+        _mergeTime++;
+        if(_mergeTime ==4 )
+        {
+            Good.SetActive(true);
+        }else if(_mergeTime ==7)
+        {
+            Wonderful.SetActive(true);
+        }else if(_mergeTime == 10)
+        {
+            Great.SetActive(true);
+        }
 
+    }
     IEnumerator Rotating_Enter()
     {
+        _settingMgr.LastMartchTime(_mergeTime); 
+        _mergeTime = 0;
         _uiMgr.UpdateUI();
             _settingMgr.currentRound++;
             _uiMgr.SetStateText("Rotate Before");

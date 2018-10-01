@@ -289,6 +289,7 @@ public class Cell : MonoBehaviour {
     public bool isMerging = false;
     public void MergeTo(Cell anotherCell)
     {
+        LevelMgr.Current.AddMatchTime();
         LevelMgr.Current.AddScore(anotherCell);
         SoundMgr.Current.PlayMergeSound();
         isMerging = true;

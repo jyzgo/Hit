@@ -30,7 +30,8 @@ public class SoundMgr : MonoBehaviour {
 
     public void PlayMergeSound()
     {
-        _sfx.PlayClip(mergersound);
+        
+        _sfx.PlayClip(mergersound,1,LevelMgr.Current._mergeTime *0.1f + 0.9f);
     }
 
     public void PlayCoinCameOut()
@@ -53,13 +54,5 @@ public class SoundMgr : MonoBehaviour {
         _sfx.PlayClip(bombSound);
     }
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 }

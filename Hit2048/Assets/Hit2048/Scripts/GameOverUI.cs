@@ -37,6 +37,9 @@ public class GameOverUI : MonoBehaviour {
     public Text CurrentBomb;
     public Text RecordBomb;
 
+    public Text CurrentMatch;
+    public Text RecordMatch;
+
     public GameObject ResetButton;
 
     SettingMgr _settingMgr;
@@ -67,6 +70,9 @@ public class GameOverUI : MonoBehaviour {
         CurrentBomb.text = _settingMgr.currentBomb.ToString();
         RecordBomb.text = _settingMgr.recordBomb.ToString();
 
+        CurrentMatch.text = _settingMgr.currentMatch.ToString();
+        RecordMatch.text = _settingMgr.recordMatch.ToString();
+
         _settingMgr.OnGameOverShowed();
 
 
@@ -80,7 +86,5 @@ public class GameOverUI : MonoBehaviour {
 
 
 	// Update is called once per frame
-	void Update () {
-		
-	}
+
 }
